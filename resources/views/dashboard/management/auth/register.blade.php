@@ -71,12 +71,12 @@
                                 <form id="Ecommarce--{{ $manager->id }}" action="{{ route('management.manager.down',$manager->id) }}" method="post">
                                     @csrf
                                 <div class="form-check form-switch">
-                                    <input onchange="confirm('Are you sure?') && document.getElementById('Ecommarce--{{ $manager->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $manager->role == 'manager' ? 'checked' : 'deactive' }}>
+                                    <input onchange="confirm('Are you want demotion {{ $manager->name }}?') && document.getElementById('Ecommarce--{{ $manager->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $manager->role == 'manager' ? 'checked' : 'deactive' }}>
                                 </div>
                                 </form>
                              </td>
                               <td>
-                                <a href="" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
+                                <a href="{{ route('management.manager.block',$manager->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
                                 <a href="{{ route('management.manager.delete',$manager->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif

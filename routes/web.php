@@ -37,12 +37,24 @@ Route::middleware(['role_check'])->group(function(){
     Route::get('/management', [ManagementController::class, 'index'])->name('management.register');
     Route::post('/management/store', [ManagementController::class, 'store'])->name('management.register.store');
     Route::post('/management/manager/down/{id}', [ManagementController::class, 'manager_down'])->name('management.manager.down');
+    Route::get('/management/manager/block/{id}', [ManagementController::class, 'manager_block'])->name('management.manager.block');
     Route::get('/management/manager/delete/{id}', [ManagementController::class, 'manager_delete'])->name('management.manager.delete');
 
     // assign existing role
     Route::get('/management/role', [ManagementController::class, 'assign_existing_role'])->name('management.assign.existing.role');
     Route::post('/management/role/store', [ManagementController::class, 'assign_existing_role_store'])->name('management.assign.existing.role.store');
+    // blogger part start
     Route::post('/management/role/blogger/down/{id}', [ManagementController::class, 'assign_existing_role_blogger_down'])->name('management.assign.existing.role.blogger.down');
+    Route::post('/management/role/blogger/block/{id}', [ManagementController::class, 'assign_existing_role_blogger_block'])->name('management.assign.existing.role.blogger.block');
+    Route::get('/management/role/blogger/delete/{id}', [ManagementController::class, 'assign_existing_role_blogger_delete'])->name('management.assign.existing.role.blogger.delete');
+   //blogger part end
+
+   //user part start
+    Route::get('/management/role/User/edit/{id}', [ManagementController::class, 'user_edit'])->name('management.assign.existing.role.user.edit');
+    Route::post('/management/role/User/update/{id}', [ManagementController::class, 'user_update'])->name('management.assign.existing.role.user.update');
+    Route::post('/management/role/User/block/{id}', [ManagementController::class, 'assign_existing_role_user_block'])->name('management.assign.existing.role.user.block');
+    Route::get('/management/role/User/delete/{id}', [ManagementController::class, 'assign_existing_role_user_delete'])->name('management.assign.existing.role.user.delete');
+    //user part end
 });
 //dashboard management route end
 

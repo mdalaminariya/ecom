@@ -118,16 +118,16 @@
                              </td>
                              @if(auth()->user()->role == 'admin')
                              <td>
-                                <form id="Ecommarce" action="{{ route('management.assign.existing.role.blogger.down', $blogger->id) }}" method="post">
+                                <form id="Ecommarce--{{ $blogger->id }}" action="{{ route('management.assign.existing.role.blogger.down', $blogger->id) }}" method="post">
                                     @csrf
                                 <div class="form-check form-switch">
-                                    <input onchange="document.getElementById('Ecommarce').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $blogger->role == 'blogger' ? 'checked' : 'deactive' }}>
+                                    <input onchange="confirm('Are you want demotion {{ $blogger->name }}?') && document.getElementById('Ecommarce--{{ $blogger->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $blogger->role == 'blogger' ? 'checked' : 'deactive' }}>
                                 </div>
                                 </form>
                              </td>
                               <td>
-                                <a href="#" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
-                                <a href="#" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                <a href="{{ route('management.assign.existing.role.blogger.block', $blogger->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
+                                <a href="{{ route('management.assign.existing.role.blogger.delete', $blogger->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif
                            </tr>
@@ -175,16 +175,15 @@
                              </td>
                              @if(auth()->user()->role == 'admin')
                              <td>
-                                <form id="Ecommarce" action="#" method="post">
+                                <form id="Ecommarce--{{ $user->id }}" action="{{ route('management.assign.existing.role.user.block', $user->id) }}" method="post">
                                     @csrf
                                 <div class="form-check form-switch">
-                                    <input onchange="document.getElementById('Ecommarce').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $user->role == 'user' ? 'checked' : 'deactive' }}>
+                                    <input onchange="confirm('Are you want blocked this user {{ $user->name }}?') && document.getElementById('Ecommarce--{{ $user->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $user->role == 'user' ? 'checked' : '' }}>
                                 </div>
-                                </form>
                              </td>
                               <td>
-                                <a href="#" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
-                                <a href="#" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                <a href="{{ route('management.assign.existing.role.user.edit', $user->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-edit"></i></a>
+                                <a href="{{ route('management.assign.existing.role.user.delete', $user->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif
                            </tr>
