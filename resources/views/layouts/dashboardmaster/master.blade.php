@@ -113,6 +113,22 @@
                             <span class="sub-item">Assign Existing Role</span>
                           </a>
                         </li>
+
+                        <li>
+                          <a href="{{ route('management.user.block') }}">
+                            <span class="sub-item">Blocked User's</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="{{ route('management.user.block') }}">
+                            <span class="sub-item">Blocked User</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="{{ route('management.user.block') }}">
+                            <span class="sub-item">Blocked User</span>
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </li>

@@ -76,7 +76,7 @@
                                 </form>
                              </td>
                               <td>
-                                <a href="{{ route('management.manager.block',$manager->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
+                                <a href="{{ route('management.assign.existing.role.manager.edit',$manager->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-edit"></i></a>
                                 <a href="{{ route('management.manager.delete',$manager->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif

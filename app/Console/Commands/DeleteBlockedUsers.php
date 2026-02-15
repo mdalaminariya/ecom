@@ -27,12 +27,14 @@ class DeleteBlockedUsers extends Command
      */
     public function handle()
     {
-        $date = Carbon::now()->subDays(1);// Adjust the number of days as needed
 
-        User::where('blocked', true)
-            ->where('blocked_at', '<=', $date)
-            ->delete();
+    $date = Carbon::now()->subDays(1);
 
-        $this->info('Blocked users older than 30 days deleted.');
-    }
+    $deleted = User::where('blocked', true)
+        ->where('blocked_at', '<=', $date)
+        ->delete();
+
+   $this->info("$deleted blocked users deleted successfully.");
+}
+
 }

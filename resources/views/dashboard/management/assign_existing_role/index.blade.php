@@ -126,7 +126,7 @@
                                 </form>
                              </td>
                               <td>
-                                <a href="{{ route('management.assign.existing.role.blogger.block', $blogger->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-alt-slash"></i></a>
+                                <a href="{{ route('management.assign.existing.role.blogger.edit', $blogger->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-edit"></i></a>
                                 <a href="{{ route('management.assign.existing.role.blogger.delete', $blogger->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif
@@ -142,6 +142,7 @@
                 </div>
 </div>
                 {{-- Blogger Show page End --}}
+
                 {{-- User Show page Start --}}
 <div class="col-lg-6">
                 <div class="card">
@@ -156,7 +157,7 @@
                           <th scope="col">Name</th>
                           <th scope="col">Role</th>
                           @if(auth()->user()->role == 'admin')
-                          <th scope="col">Status</th>
+                          <th scope="col">Blocked</th>
                           <th scope="col">Action</th>
                             @endif
                         </tr>

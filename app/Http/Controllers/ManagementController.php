@@ -62,16 +62,21 @@ class ManagementController extends Controller
             return back()->with('success','Manager Demotion Successfully..!');
         }
     }
-    public function manager_block(Request $request,$id){
-        $user = User::where('id',$id)->first();
-        if($user->role =='manager'){
-           User::find($user->id)->update([
-                'blocked' => true,
-                'blocked_at' => now(),
+    public function manager_edit(Request $request,$id){
+        $manager = User::where('id',$id)->first();
+        return view('dashboard.management.assign_existing_role.managerEdit.edit',compact('manager'));
+    }
+        public function manager_update(Request $request, $id){
+         $manager = User::where('id',$id)->first();
+        if($manager){
+            $manager->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'password'=>bcrypt($request->password),
             ]);
-            return back()->with('success','Manager Blocked Successfully..!');
+            return redirect()->route('management.register')->with('success','Manager updated successfully');
         }else{
-            return back()->withErrors(['error' => 'Invalid role for blocking.'])->withInput();
+            return back()->withErrors(['error' => 'Manager not found.'])->withInput();
         }
     }
 
@@ -128,11 +133,28 @@ class ManagementController extends Controller
         if($user->role == 'blogger'){
             User::find($user->id)->update([
                 'blocked' => true,
-                'blocked_at' => now(),
+                'updated_at' => now(),
             ]);
             return back()->with('success','Blogger blocked successfully');
         }else{
             return back()->withErrors(['error' => 'Invalid role for blocking.'])->withInput();
+        }
+    }
+      public function blogger_edit($id){
+        $blogger = User::where('id',$id)->first();
+        return view('dashboard.management.assign_existing_role.bloggerEdit.edit',compact('blogger'));
+    }
+    public function blogger_update(Request $request, $id){
+         $blogger = User::where('id',$id)->first();
+        if($blogger){
+            $blogger->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'password'=>bcrypt($request->password),
+            ]);
+            return redirect()->route('management.assign.existing.role')->with('success','Blogger updated successfully');
+        }else{
+            return back()->withErrors(['error' => 'Blogger not found.'])->withInput();
         }
     }
     public function assign_existing_role_blogger_delete(Request $request, $id){
@@ -150,7 +172,7 @@ class ManagementController extends Controller
     // user part start
     public function user_edit($id){
         $user = User::where('id',$id)->first();
-        return view('dashboard.management.assign_existing_role.edit',compact('user'));
+        return view('dashboard.management.assign_existing_role.userEdit.edit',compact('user'));
     }
 
     public function user_update(Request $request, $id){
@@ -171,6 +193,19 @@ class ManagementController extends Controller
             return back()->withErrors(['error' => 'User not found.'])->withInput();
         }
     }
+        public function assign_existing_role_user_block(Request $request, $id){
+        $user = User::where('id',$id)->first();
+
+        if($user->role == 'user'){
+            User::find($user->id)->update([
+                'blocked' => true,
+                'blocked_at' => now(),
+            ]);
+            return back()->with('success','User blocked successfully');
+        }else{
+            return back()->withErrors(['error' => 'Invalid role for blocking.'])->withInput();
+        }
+    }
     public function assign_existing_role_user_delete(Request $request, $id){
         $user = User::where('id',$id)->first();
 
@@ -183,4 +218,25 @@ class ManagementController extends Controller
     }
 
     // user part end
+
+    //block user show page start
+    public function block_user(){
+        $users = User::where('role','user')->where('blocked',true)->get();
+        return view('dashboard.management.blocked.blockUser',compact('users'));
+    }
+    //block user show page end
+
+    public function unblock_user(Request $request,$id){
+        $user = User::where('id',$id)->first();
+
+        if($user->role == 'user'){
+        $user->update([
+        'blocked' => false,
+        'updated_at' => now(),
+        ]);
+         return back()->with('success','User Unblocked successfully');
+    }else{
+        return back()->withErrors('error','Can not found any user..!');
+    }
+}
 }
