@@ -1,42 +1,13 @@
 @extends('layouts.dashboardmaster.master')
 
+@section('title')
+    Category Management
+@endsection
+
 @section('content')
-
-<div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Forms</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="#">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Forms</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Basic Form</a>
-                </li>
-              </ul>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="card">
-                  <div class="card-header mx-auto">
-                    <div class="card-title text-success">Category</div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-
+<x-breadcum aranoz="Category List"></x-breadcum>
 <div class="row">
+    {{-- category show tabel start--}}
     <div class="col-lg-6 mx-5">
                 <div class="card">
                   <div class="card-header">
@@ -66,12 +37,12 @@
                                 {{ $category->title }}
                              </td>
                              <td>
-                                <form id="Ecommarce" action="{{ route('category.status',$category->slug) }}" method="post">
+                            <form id="Ecommarce-{{ $category->id }}" action="{{ route('category.status', $category->slug) }}" method="post">
                                     @csrf
                                 <div class="form-check form-switch">
-                                    <input onchange="document.getElementById('Ecommarce').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $category->status == 'active' ? 'checked' : 'deactive' }}>
+                                    <input onchange="document.getElementById('Ecommarce-{{ $category->id }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $category->status == 'active' ? 'checked' : '' }}>
                                 </div>
-                                </form>
+                            </form>
                              </td>
                              <td class="d-flex gap-2">
                                 <a href="{{ route('category.edit',$category->slug) }}" class="btn btn-info btn-sm"><i class="far fa-edit"></i></a>
@@ -83,7 +54,8 @@
                     </table>
                   </div>
                 </div>
-              </div>
+    </div>
+    {{-- category show tabel end--}}
               {{-- category Insert From --}}
               <div class="col-lg-5" style="margin-left: -30px">
                 <div class="card">
@@ -107,10 +79,13 @@
                                   <input type="text" name="slug" class="form-control" id="inputPassword3" placeholder="Slug">
                                  </div>
                           </div>
+                           <div class="mb-3">
+                                 <img style="height: 8rem; margin-left: 30%;" id="ecommerce" src="{{ asset('images/default/default.png') }}" alt="">
+                            </div>
                             <div class="row mb-2">
                                  <label for="inputPassword5" class="col-sm-3 col-form-label">Thumbnail</label>
                                  <div class="col-sm-9">
-                                    <input type="file" name="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror" id="inputPassword5">
+                                     <input onchange="document.querySelector('#ecommerce').src = window.URL.createObjectURL(this.files[0])" type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail" id="floatingnameInput">
                                     <div class="invalid-feedback">
                                             @error('thumbnail') {{ $message }} @enderror
                                         </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Frontend\AuthenticationController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ManagementController;
+use App\Http\Controllers\ProductController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController as BackendHomeController;
@@ -44,27 +45,28 @@ Route::middleware(['role_check'])->group(function(){
     // assign existing role
     Route::get('/management/role', [ManagementController::class, 'assign_existing_role'])->name('management.assign.existing.role');
     Route::post('/management/role/store', [ManagementController::class, 'assign_existing_role_store'])->name('management.assign.existing.role.store');
-    // blogger part start
-    Route::get('/management/role/blogger/edit/{id}', [ManagementController::class, 'blogger_edit'])->name('management.assign.existing.role.blogger.edit');
-    Route::post('/management/role/blogger/update/{id}', [ManagementController::class, 'blogger_update'])->name('management.assign.existing.role.blogger.update');
+    // seller part start
+    Route::get('/management/role/seller/edit/{id}', [ManagementController::class, 'seller_edit'])->name('management.assign.existing.role.seller.edit');
+    Route::post('/management/role/seller/update/{id}', [ManagementController::class, 'seller_update'])->name('management.assign.existing.role.seller.update');
 
-    Route::post('/management/role/blogger/down/{id}', [ManagementController::class, 'assign_existing_role_blogger_down'])->name('management.assign.existing.role.blogger.down');
-    Route::post('/management/role/blogger/block/{id}', [ManagementController::class, 'assign_existing_role_blogger_block'])->name('management.assign.existing.role.blogger.block');
-    Route::get('/management/role/blogger/delete/{id}', [ManagementController::class, 'assign_existing_role_blogger_delete'])->name('management.assign.existing.role.blogger.delete');
-   //blogger part end
+    Route::post('/management/role/seller/down/{id}', [ManagementController::class, 'assign_existing_role_seller_down'])->name('management.assign.existing.role.seller.down');
+    Route::post('/management/role/seller/block/{id}', [ManagementController::class, 'assign_existing_role_seller_block'])->name('management.assign.existing.role.seller.block');
+    Route::get('/management/role/seller/delete/{id}', [ManagementController::class, 'assign_existing_role_seller_delete'])->name('management.assign.existing.role.seller.delete');
+   //seller part end
 
    //user part start
-    Route::get('/management/role/User/edit/{id}', [ManagementController::class, 'user_edit'])->name('management.assign.existing.role.user.edit');
-    Route::post('/management/role/User/update/{id}', [ManagementController::class, 'user_update'])->name('management.assign.existing.role.user.update');
-    Route::post('/management/role/User/block/{id}', [ManagementController::class, 'assign_existing_role_user_block'])->name('management.assign.existing.role.user.block');
-    Route::get('/management/role/User/delete/{id}', [ManagementController::class, 'assign_existing_role_user_delete'])->name('management.assign.existing.role.user.delete');
+    Route::get('/management/role/user/edit/{id}', [ManagementController::class, 'user_edit'])->name('management.assign.existing.role.user.edit');
+    Route::post('/management/role/user/update/{id}', [ManagementController::class, 'user_update'])->name('management.assign.existing.role.user.update');
+    Route::post('/management/role/user/block/{id}', [ManagementController::class, 'assign_existing_role_user_block'])->name('management.assign.existing.role.user.block');
+    Route::get('/management/role/user/delete/{id}', [ManagementController::class, 'assign_existing_role_user_delete'])->name('management.assign.existing.role.user.delete');
     //user part end
 
     //block users part start
     Route::get('/management/block',[ManagementController::class, 'block_user'])->name('management.user.block');
     Route::post('/management/unblock/{id}',[ManagementController::class, 'unblock_user'])->name('management.user.unblock');
+    Route::get('/management/delete/{id}',[ManagementController::class, 'delete_block_user'])->name('management.block.user.delete');
     //block users part end
-});
+
 //dashboard management route end
 
 //Account Settings Routes start
@@ -84,4 +86,10 @@ Route::post('/category/update/{slug}',[CategoryController::class,'update'])->nam
 Route::get('/category/delete/{slug}',[CategoryController::class,'delete'])->name('category.delete');
 // Category Routes end
 
+//add product routes start
+Route::resource('/product',ProductController::class);
+Route::post('/product/status/{id}',[ProductController::class,'status'])->name('product.status');
+//add product routes end
+
 // Backend Routes end
+});

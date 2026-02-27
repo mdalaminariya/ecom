@@ -1,41 +1,12 @@
 @extends('layouts.dashboardmaster.master')
 
-@section('content')
+@section('title')
+    Registration Management
+@endsection
 
-<div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Forms</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="#">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Forms</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Basic Form</a>
-                </li>
-              </ul>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="card">
-                  <div class="card-header mx-auto">
-                    <div class="card-title text-success">Management</div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-</div>
+@section('content')
 <div class="row">
+<x-breadcum aranoz="Registration Management"></x-breadcum>
 <div class="col-lg-6 mx-4">
                 <div class="card">
                   <div class="card-header">
@@ -133,7 +104,7 @@
                                   <select class="form-select @error('role') is-invalid @enderror" name="role">
                                     <option value="">Select Role</option>
                                     <option value="manager">Manager</option>
-                                    <option value="blogger">Blogger</option>
+                                    <option value="seller">Seller</option>
                                     <option value="user">User</option>
                                   </select>
                                     <div class="invalid-feedback">

@@ -1,69 +1,73 @@
 @extends('layouts.dashboardmaster.master')
 
 @section('title')
-    Blocked User Management
+    Show Product's
 @endsection
 
-
 @section('content')
+<x-breadcum aranoz="Product List"></x-breadcum>
+
 <div class="row">
-<x-breadcum aranoz="Blocked User"></x-breadcum>
-       <div class="col-lg-12">
+      <div class="col-lg-10" style="margin-left: 8%">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Block User's Table</div>
+                    <div class="card-title">Product Table</div>
                   </div>
                   <div class="card-body">
                     <table class="table table-head-bg-success">
                       <thead>
                         <tr>
                           <th scope="col">No.</th>
-                          <th scope="col">Name</th>
-                          <th scope="col">Role</th>
-                          @if(auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
-                          <th scope="col">Blocked</th>
+                          <th scope="col">Thumbnail</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">description</th>
+                          <th scope="col">Status</th>
                           <th scope="col">Action</th>
-                            @endif
                         </tr>
                       </thead>
                       <tbody>
-                     @forelse ($users as $user)
+                     @foreach ($products as $product)
                            <tr>
                              <th scope="row">
                                 {{ $loop->index + 1 }}
                             </th>
                              <td>
-                                {{ $user->name }}
+                                <img src="{{ asset('images/product/'.$product->thumbnail) }}" style="width: 50px; height: 25px;">
                              </td>
                              <td>
-                                {{ $user->role }}
+                                {{ $product->title }}
                              </td>
-                             @if(auth()->user()->role == 'admin')
                              <td>
-                                <form id="Ecommarce--{{ $user->id }}" action="{{ route('management.user.unblock', $user->id) }}" method="post">
+                                {!! $product->price !!}
+                             </td>
+                             <td>
+                                {!! Str::limit($product->description, 30) !!}
+                             </td>
+                             <td>
+                            <form id="Ecommarce-{{ $product->id }}" action="{{ route('product.status', $product->id) }}" method="post">
                                     @csrf
-                                <div class="form-check form-switch">
-                                    <input onchange="confirm('Are you want Unblocked {{ $user->name }}?') && document.getElementById('Ecommarce--{{ $user->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $user->role == 'user' ? 'checked' : 'deactive' }}>
+                                <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
+                                    <input onchange="document.getElementById('Ecommarce-{{ $product->id }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->status == 'active' ? 'checked' : '' }}>
                                 </div>
+                            </form>
+                             </td>
+                             <td class="d-flex gap-2">
+                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-info btn-sm mb-4"><i class="far fa-edit"></i></a>
+                                <form action="{{ route('product.destroy', $product->id) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn btn-danger btn-sm mb-4"><i class="far fa-trash-alt"></i></button>
                                 </form>
                              </td>
-                              <td>
-                                <a href="{{ route('management.block.user.delete', $user->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
-                             </td>
-                             @endif
                            </tr>
-                           @empty
-                           <tr>
-                             <td colspan="5" class="text-danger text-center">Please Insert Data.!</td>
-                           </tr>
-                     @endforelse
+                     @endforeach
                       </tbody>
                     </table>
                   </div>
                 </div>
+    </div>
 </div>
-</div>
-
 
 @endsection
 

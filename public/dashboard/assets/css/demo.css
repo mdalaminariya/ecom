@@ -134,7 +134,7 @@
     vertical-align: bottom; }
     .table-typo tbody > tr > td:first-child p {
       font-size: 14px;
-      color: #333; }
+      color: #ff0000; }
 
 .demo-icon {
   display: flex;

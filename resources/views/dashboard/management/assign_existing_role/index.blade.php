@@ -1,42 +1,13 @@
 @extends('layouts.dashboardmaster.master')
 
+@section('title')
+    Assign Existing Role
+@endsection
+
+
 @section('content')
-
-<div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Forms</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="#">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Forms</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Basic Form</a>
-                </li>
-              </ul>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="card">
-                  <div class="card-header mx-auto">
-                    <div class="card-title text-success">Assign Existing Role</div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-</div>
-
 <div class="row">
+<x-breadcum aranoz="Assign Existing Role"></x-breadcum>
 <div class="col-lg-11 mx-5">
                 <div class="card">
                     <div class="card-body">
@@ -66,7 +37,7 @@
                                   <select class="form-select @error('role') is-invalid @enderror" name="role">
                                     <option value="">Select Role</option>
                                     <option value="manager">Manager</option>
-                                    <option value="blogger">Blogger</option>
+                                    <option value="seller">Seller</option>
                                   </select>
                                     <div class="invalid-feedback">
                                             @error('role') {{ $message }} @enderror
@@ -85,11 +56,11 @@
 </div>
 
 <div class="row">
-    {{-- Blogger Show page Sart --}}
+    {{-- Seller Show page Sart --}}
     <div class="col-lg-6">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Blogger's Table</div>
+                    <div class="card-title">Seller's Table</div>
                   </div>
                   <div class="card-body">
                     <table class="table table-head-bg-success">
@@ -105,29 +76,28 @@
                         </tr>
                       </thead>
                       <tbody>
-                     @forelse ($bloggers as $blogger)
+                     @forelse ($sellers as $seller)
                            <tr>
                              <th scope="row">
                                 {{ $loop->index + 1 }}
                             </th>
                              <td>
-                                {{ $blogger->name }}
+                                {{ $seller->name }}
                              </td>
                              <td>
-                                {{ $blogger->role }}
+                                {{ $seller->role }}
                              </td>
                              @if(auth()->user()->role == 'admin')
-                             <td>
-                                <form id="Ecommarce--{{ $blogger->id }}" action="{{ route('management.assign.existing.role.blogger.down', $blogger->id) }}" method="post">
+                                    <td>
+                                <form id="Ecommarce--{{ $seller->id }}" action="{{ route('management.assign.existing.role.seller.down', $seller->id) }}" method="post">
                                     @csrf
                                 <div class="form-check form-switch">
-                                    <input onchange="confirm('Are you want demotion {{ $blogger->name }}?') && document.getElementById('Ecommarce--{{ $blogger->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $blogger->role == 'blogger' ? 'checked' : 'deactive' }}>
+                                    <input onchange="confirm('Are you want Demotion this seller {{ $seller->name }}?') && document.getElementById('Ecommarce--{{ $seller->id }}').submit()" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" {{ $seller->role == 'seller' ? 'checked' : '' }}>
                                 </div>
-                                </form>
                              </td>
                               <td>
-                                <a href="{{ route('management.assign.existing.role.blogger.edit', $blogger->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-edit"></i></a>
-                                <a href="{{ route('management.assign.existing.role.blogger.delete', $blogger->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                <a href="{{ route('management.assign.existing.role.seller.edit', $seller->id) }}" class="btn btn-info btn-sm"><i class="fas fa-user-edit"></i></a>
+                                <a href="{{ route('management.assign.existing.role.seller.delete', $seller->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                              </td>
                              @endif
                            </tr>
@@ -141,7 +111,7 @@
                   </div>
                 </div>
 </div>
-                {{-- Blogger Show page End --}}
+                {{-- Seller Show page End --}}
 
                 {{-- User Show page Start --}}
 <div class="col-lg-6">

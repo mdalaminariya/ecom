@@ -1,6 +1,12 @@
 @extends('layouts.dashboardmaster.master')
 
+@section('title')
+    Dashboard
+@endsection
+
 @section('content')
+<x-breadcum aranoz="Dashboard"></x-breadcum>
+        <div class="row">
         <div class="container">
           <div class="page-inner">
             <div
@@ -622,7 +628,7 @@
             </div>
           </div>
         </div>
-
+</div>
 
 
 @endsection

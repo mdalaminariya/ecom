@@ -30,7 +30,7 @@ class CategoryController extends Controller
             $image->toPng()->save(base_path('public/images/category/'.$newname));
 
             if($request->slug){
-                Category::insert([
+                Category::create([
                     'title' => Str::ucfirst($request->title),
                     'slug' => Str::slug($request->slug,'-'),
                     'thumbnail' => $newname,
@@ -38,7 +38,7 @@ class CategoryController extends Controller
                 ]);
                 return back()->with('success','Category inserted successfully');
             }else{
-                Category::insert([
+                Category::create([
                     'title' => Str::ucfirst($request->title),
                     'slug' => Str::slug($request->title,'-'),
                     'thumbnail' => $newname,
@@ -53,22 +53,20 @@ class CategoryController extends Controller
 
     public function status($slug){
         $category = Category::where('slug',$slug)->first();
-
-        if($category->status == 'active'){
-            Category::where('slug',$slug)->update([
-                'status' => 'deative',
-                'updated_at' => now(),
-            ]);
-            return back()->with('error','Status Deactived');
-        }else{
-            Category::where('slug',$slug)->update([
+        if($category->status == 'deactive'){
+             $category->update([
                 'status' => 'active',
                 'updated_at' => now(),
             ]);
-             return back()->with('success','Status Actived');
-        }
+            return back()->with('success','Status Actived');
+        }else{
+            $category->update([
+                'status' => 'active',
+                'updated_at' => now(),
+            ]);
+            return back()->with('success','Status Actived');
     }
-
+    }
     public function edit($slug){
         $category = Category::where('slug',$slug)->first();
         return view('dashboard.category.edit',compact('category'));

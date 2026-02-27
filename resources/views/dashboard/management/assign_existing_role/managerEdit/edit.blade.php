@@ -1,46 +1,15 @@
 @extends('layouts.dashboardmaster.master')
 
-@section('content')
-    <div class="row">
-        <div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Forms</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="#">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Forms</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Basic Form</a>
-                </li>
-              </ul>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="card">
-                  <div class="card-header mx-auto">
-                    <div class="card-title text-success">User Update</div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-    </div>
+@section('title')
+    Manager Update
+@endsection
 
+@section('content')
+<x-breadcum aranoz="Manager Update"></x-breadcum>
     <div class="col-lg-11 mx-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title mb-3">Management Insert Form</h4>
+                        <h4 class="header-title mb-3">Manager Update Form</h4>
                         <hr style="color: gray; width: 102%; margin-left: -1%;">
                         <form action="{{ route('management.assign.existing.role.manager.update',$manager->id) }}" method="post">
                             @csrf

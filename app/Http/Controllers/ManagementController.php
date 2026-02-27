@@ -17,7 +17,7 @@ class ManagementController extends Controller
             'name'=>'required|string|max:255',
             'email'=>'required|email|unique:users,email',
             'password'=>'required|string|min:8',
-            'role' => 'required|in:manager,blogger,user',
+            'role' => 'required|in:manager,seller,user',
         ]);
 
         if(!$request->role == ''){
@@ -93,12 +93,12 @@ class ManagementController extends Controller
     // assign existing role
     public function assign_existing_role(){
         $users = User::where('role','user')->where('blocked',false)->get();
-        $bloggers = User::where('role','blogger')->get();
-        return view('dashboard.management.assign_existing_role.index',compact('users','bloggers'));
+        $sellers = User::where('role','seller')->get();
+        return view('dashboard.management.assign_existing_role.index',compact('users','sellers'));
     }
     public function assign_existing_role_store(Request $request){
         $request->validate([
-            'role'=>'required|in:manager,blogger,user',
+            'role'=>'required|in:manager,seller,user',
         ]);
         $user = User::where('id',$request->user_id)->first();
         if($user){
@@ -112,11 +112,11 @@ class ManagementController extends Controller
         }
     }
 
-    // blogger part start
-    public function assign_existing_role_blogger_down(Request $request, $id){
+    // seller part start
+    public function assign_existing_role_seller_down(Request $request, $id){
         $user = User::where('id',$id)->first();
 
-        if($user->role == 'blogger'){
+        if($user->role == 'seller'){
             $user->update([
                 'role' => 'user',
                 'updated_at' => now()
@@ -127,47 +127,34 @@ class ManagementController extends Controller
         }
 }
 
-    public function assign_existing_role_blogger_block(Request $request, $id){
-        $user = User::where('id',$id)->first();
-
-        if($user->role == 'blogger'){
-            User::find($user->id)->update([
-                'blocked' => true,
-                'updated_at' => now(),
-            ]);
-            return back()->with('success','Blogger blocked successfully');
-        }else{
-            return back()->withErrors(['error' => 'Invalid role for blocking.'])->withInput();
-        }
+      public function seller_edit($id){
+        $seller = User::where('id',$id)->first();
+        return view('dashboard.management.assign_existing_role.sellerEdit.edit',compact('seller'));
     }
-      public function blogger_edit($id){
-        $blogger = User::where('id',$id)->first();
-        return view('dashboard.management.assign_existing_role.bloggerEdit.edit',compact('blogger'));
-    }
-    public function blogger_update(Request $request, $id){
-         $blogger = User::where('id',$id)->first();
-        if($blogger){
-            $blogger->update([
+    public function seller_update(Request $request, $id){
+         $seller = User::where('id',$id)->first();
+        if($seller){
+            $seller->update([
                 'name'=>$request->name,
                 'email'=>$request->email,
                 'password'=>bcrypt($request->password),
             ]);
-            return redirect()->route('management.assign.existing.role')->with('success','Blogger updated successfully');
+            return redirect()->route('management.assign.existing.role')->with('success','seller updated successfully');
         }else{
-            return back()->withErrors(['error' => 'Blogger not found.'])->withInput();
+            return back()->withErrors(['error' => 'seller not found.'])->withInput();
         }
     }
-    public function assign_existing_role_blogger_delete(Request $request, $id){
+    public function assign_existing_role_seller_delete(Request $request, $id){
         $user = User::where('id',$id)->first();
 
-        if($user->role == 'blogger'){
+        if($user->role == 'seller'){
             $user->delete();
-            return back()->with('success','Blogger deleted successfully');
+            return back()->with('success','seller deleted successfully');
         }else{
             return back()->withErrors(['error' => 'Invalid role for deletion.'])->withInput();
         }
     }
-    //blogger part end
+    //seller part end
 
     // user part start
     public function user_edit($id){
@@ -239,4 +226,15 @@ class ManagementController extends Controller
         return back()->withErrors('error','Can not found any user..!');
     }
 }
+    public function delete_block_user(Request $request, $id){
+        $user = User::where('id',$id)->first();
+
+        if($user->role == 'user'){
+            $user->delete();
+            return back()->with('success','User deleted successfully');
+        }else{
+            return back()->withErrors(['error' => 'Invalid role for deletion.'])->withInput();
+        }
+    }
+
 }

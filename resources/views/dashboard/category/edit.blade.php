@@ -1,43 +1,12 @@
 @extends('layouts.dashboardmaster.master')
 
+@section('title')
+    Category Edit
+@endsection
+
 @section('content')
-
-<div class="page-inner">
-            <div class="page-header">
-              <h3 class="fw-bold mb-3">Forms</h3>
-              <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                  <a href="#">
-                    <i class="icon-home"></i>
-                  </a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Forms</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Basic Form</a>
-                </li>
-              </ul>
-            </div>
-            <div class="row">
-              <div class="col-md-12 ">
-                <div class="card">
-                  <div class="card-header mx-auto">
-                    <div class="card-title text-success">Category Update</div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-
-
       <div class="row">
+<x-breadcum aranoz="Category Edit"></x-breadcum>
               {{-- category Insert From --}}
               <div class="col-lg-8" style="margin-left: 10%">
                 <div class="card">

@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>ARNOZ - Bootstrap 5 Admin Dashboard</title>
+    <title>ARANOZ - @yield('title')</title>
     <meta
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
       name="viewport"
@@ -42,6 +42,9 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('dashboard') }}/assets/css/demo.css" />
+
+    // TinyMCE Editor CDN link
+    <script src="https://cdn.tiny.cloud/1/9fok538z63ejkbg4f2ghvqy5xlh9261qil4x73sn89bkq5w8/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -50,14 +53,14 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="{{ route('frontend.home') }}" class="logo">
               <img
                 src="{{ asset('frontend') }}/assets/img/fevicon.png"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
               />
-              <div class="text-success" style="font-size: 40px; margin-left: 8px;"><b>Arnoz</b></div>
+              <a class="text-success" href="{{ route('frontend.home') }}" style="font-size: 40px; margin-left: 8px;"><b>Aranoz</b></a>
             </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
@@ -119,22 +122,41 @@
                             <span class="sub-item">Blocked User's</span>
                           </a>
                         </li>
+                      </ul>
+                    </div>
+                  </li>
+        @endif
+              {{-- Management Route link end --}}
+
+              {{-- Blog Route link start --}}
+        @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'manager' || auth()->user()->role == 'Seller')
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#product">
+                      <i class="fab fa-blogger"></i>
+                      <p>Product</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="product">
+                      <ul class="nav nav-collapse">
                         <li>
-                          <a href="{{ route('management.user.block') }}">
-                            <span class="sub-item">Blocked User</span>
+                          <a href="{{ route('product.index') }}">
+                            <span class="sub-item">Show Products</span>
                           </a>
                         </li>
+
                         <li>
-                          <a href="{{ route('management.user.block') }}">
-                            <span class="sub-item">Blocked User</span>
+                          <a href="{{ route('product.create') }}">
+                            <span class="sub-item">Create Product</span>
                           </a>
                         </li>
                       </ul>
                     </div>
                   </li>
         @endif
-              {{-- Management Route link end --}}
-              {{-- Category Route link start --}}
+              {{-- Blog Route link end --}}
+
+               {{-- Category Route link start --}}
+             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#category">
                   <i class="fas fa-layer-group"></i>
@@ -151,6 +173,7 @@
                   </ul>
                 </div>
               </li>
+              @endif
               {{-- Category Route link end --}}
 
               {{-- Account Settings Route link start --}}
