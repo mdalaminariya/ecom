@@ -129,7 +129,7 @@
               {{-- Management Route link end --}}
 
               {{-- Blog Route link start --}}
-        @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'manager' || auth()->user()->role == 'Seller')
+        @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'manager' || auth()->user()->role == 'seller')
                   <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#product">
                       <i class="fab fa-blogger"></i>
