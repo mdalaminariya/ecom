@@ -23,7 +23,7 @@
                                                     <option>Select</option>
                                                     <optgroup label="{{env('APP_SLOGAN')}}">
                                                         @foreach ($categories as $category)
-                                                            <option value="{{ $category->id }}" @selected($category->id == $product->category_id)>
+                                                            <option value="{{ $category->id }}" @selected($category->id == $product->category_id)>{{ $category->title }}</option>
                                                         @endforeach
                                                     </optgroup>
                                                 </select>

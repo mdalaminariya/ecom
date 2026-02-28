@@ -32,14 +32,16 @@
                           </div>
                             <div class="row mb-2">
                                  <label for="inputPassword5" class="col-sm-3 col-form-label">Thumbnail</label>
-                                 <div class="col-sm-9" style="margin-left: 25%; margin-top: -5%;">
+
+                                 <div class="mb-3">
+                                    <img style="height: 15rem; margin-left: 30%; margin-top: -5%; object-fit: contain;" id="ecommerce" src="{{ asset('images/category') }}/{{ $category->thumbnail }}" alt="">
+                                </div>
+
+                                  <div class="col-sm-9 mb-2" style="margin-left: 25%;">
                                     <input onchange="document.querySelector('#ecommerce').src = window.URL.createObjectURL(this.files[0])" type="file" name="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror" id="inputPassword5">
                                     <div class="invalid-feedback">
                                             @error('thumbnail') {{ $message }} @enderror
                                         </div>
-                                </div>
-                                 <div class="mb-3">
-                                    <img style="height: 15rem; margin-left: 30%; margin-top: 2%; object-fit: contain;" id="ecommerce" src="{{ asset('images/category') }}/{{ $category->thumbnail }}" alt="">
                                 </div>
                             </div>
                             <div class="justify-content-end row">

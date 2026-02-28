@@ -6,16 +6,12 @@
 
 @section('content')
 <x-breadcum aranoz="Dashboard"></x-breadcum>
-        <div class="row">
+        <div class="row" style="margin-top: -5%">
         <div class="container">
           <div class="page-inner">
             <div
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
-              <div>
-                <h3 class="fw-bold mb-3">Dashboard</h3>
-                <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
-              </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
                 <a href="#" class="btn btn-primary btn-round">Add Customer</a>
@@ -36,7 +32,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Visitors</p>
-                          <h4 class="card-title">1,294</h4>
+                          <h4 class="card-title">{{ $totalUsers }}</h4>
                         </div>
                       </div>
                     </div>
@@ -57,7 +53,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Subscribers</p>
-                          <h4 class="card-title">1303</h4>
+                          <h4 class="card-title">{{ $totalUsers }}</h4>
                         </div>
                       </div>
                     </div>
@@ -78,7 +74,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Sales</p>
-                          <h4 class="card-title">$ 1,345</h4>
+                          <h4 class="card-title">$ {{ number_format($totalSales, 2) }}</h4>
                         </div>
                       </div>
                     </div>
@@ -99,7 +95,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Order</p>
-                          <h4 class="card-title">576</h4>
+                          <h4 class="card-title">{{ $totalOrders }}</h4>
                         </div>
                       </div>
                     </div>
@@ -170,11 +166,11 @@
                         </div>
                       </div>
                     </div>
-                    <div class="card-category">March 25 - April 02</div>
+                    <div class="card-category">{{ now()->startOfWeek()->format('M d') }} - {{ now()->endOfWeek()->format('M d') }}</div>
                   </div>
                   <div class="card-body pb-0">
                     <div class="mb-4 mt-2">
-                      <h1>$4,578.58</h1>
+                      <h1>${{ number_format($dailySales, 2) }}</h1>
                     </div>
                     <div class="pull-in">
                       <canvas id="dailySalesChart"></canvas>
@@ -184,8 +180,8 @@
                 <div class="card card-round">
                   <div class="card-body pb-0">
                     <div class="h1 fw-bold float-end text-primary">+5%</div>
-                    <h2 class="mb-2">17</h2>
-                    <p class="text-muted">Users online</p>
+                    <h2 class="mb-2">{{ $onlineUsers }}</h2>
+                    <h4 class="card-title">{{ $totalUsers ?? 0 }}</h4>
                     <div class="pull-in sparkline-fix">
                       <div id="lineChart"></div>
                     </div>
@@ -633,3 +629,48 @@
 
 @endsection
 
+@section('script')
+<script>
+    // Get the canvas element
+    const ctxStats = document.getElementById('statisticsChart').getContext('2d');
+
+    // Create the doughnut chart
+    const statisticsChart = new Chart(ctxStats, {
+        type: 'doughnut',
+        data: {
+            labels: ['Online Users', 'Offline Users'],
+            datasets: [{
+                data: [{{ $onlineUsers }}, {{ $totalUsers - $onlineUsers }}],
+                backgroundColor: ['#28a745', '#e9ecef'],
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '70%', // makes it a donut
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                pieceLabel: {
+                    mode: 'percentage',
+                    fontColor: ['white', 'black'],
+                    precision: 0
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.parsed + ' Users';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+@endsection
