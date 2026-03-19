@@ -98,6 +98,40 @@ class ProductController extends Controller
             return back()->with('success','Status Deactived');
         }
     }
+    public function best_seller($slug)
+    {
+        $product = Product::where('slug',$slug)->first();
+        if($product->is_best_seller == 0){
+             $product->update([
+                'is_best_seller' => 1,
+                'updated_at' => now(),
+            ]);
+            return back()->with('success','Product Marked as Best Seller');
+        }else{
+            $product->update([
+                'is_best_seller' => 0,
+                'updated_at' => now(),
+            ]);
+            return back()->with('success','Product Unmarked as Best Seller');
+        }
+    }
+    public function banner($id)
+    {
+        $product = Product::where('id',$id)->first();
+        if($product->is_banner == 0){
+             $product->update([
+                'is_banner' => 1,
+                'updated_at' => now(),
+            ]);
+            return back()->with('success','Product Marked as Banner');
+        }else{
+            $product->update([
+                'is_banner' => 0,
+                'updated_at' => now(),
+            ]);
+            return back()->with('success','Product Unmarked as Banner');
+        }
+    }
     public function show(Product $product)
     {
 

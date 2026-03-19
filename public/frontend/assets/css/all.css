@@ -138,6 +138,14 @@
   -webkit-transform: rotate(270deg);
           transform: rotate(270deg); }
 
+          .category-row{
+    display:flex;
+    gap:20px;
+}
+.category-row .col-lg-4{
+    flex:0 0 auto;
+    width:250px;
+}
 .fa-flip-horizontal {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
   -webkit-transform: scale(-1, 1);

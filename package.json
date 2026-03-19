@@ -18,6 +18,8 @@
         "vite": "^7.3.0"
     },
     "dependencies": {
+        "laravel-echo": "^2.3.1",
+        "pusher-js": "^8.4.0",
         "sweetalert": "^2.1.2"
     }
 }

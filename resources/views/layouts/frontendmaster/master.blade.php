@@ -1,6 +1,10 @@
 
 <!doctype html>
 <html lang="zxx">
+    @php
+    $subscribed = session()->has('newsletter_email') &&
+                  \App\Models\Newsletter::where('email', session('newsletter_email'))->exists();
+@endphp
 
 <head>
     <!-- Required meta tags -->
@@ -44,7 +48,7 @@
                         <div class="collapse navbar-collapse main-menu-item" id="navbarSupportedContent">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="index.html">Home</a>
+                                    <a class="nav-link" href="{{ route('frontend.home') }}">Home</a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_1"
@@ -52,7 +56,7 @@
                                         Shop
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
-                                        <a class="dropdown-item" href="category.html"> shop category</a>
+                                        <a class="dropdown-item" href="#"> shop category</a>
                                         <a class="dropdown-item" href="single-product.html">product details</a>
 
                                     </div>
@@ -169,25 +173,74 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-4">
-                    <div class="single_footer_part">
-                        <h4>Newsletter</h4>
-                        <p>Heaven fruitful doesn't over lesser in days. Appear creeping
-                        </p>
-                        <div id="mc_embed_signup">
-                            <form target="_blank"
-                                action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                method="get" class="subscribe_form relative mail_part">
-                                <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                    class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = ' Email Address '">
-                                <button type="submit" name="submit" id="newsletter-submit"
-                                    class="email_icon newsletter-submit button-contactForm">subscribe</button>
-                                <div class="mt-10 info"></div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                @if(!$subscribed)
+<aside class="single_sidebar_widget newsletter_widget">
+    <h4 class="widget_title">Newsletter</h4>
+
+    <form id="newsletterForm">
+        @csrf
+        <div class="form-group">
+            <input type="email" name="email" class="form-control"
+                placeholder="Enter email" required>
+        </div>
+
+        <button class="button rounded-0 primary-bg text-white w-100 btn_1">
+            Subscribe
+        </button>
+    </form>
+
+    <p id="newsletterMessage" class="mt-2"></p>
+</aside>
+@else
+<div class="alert alert-success" style="height: 50px">
+    ✅ You are already subscribed to our newsletter
+</div>
+@endif
+
+<script>
+document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+
+    e.preventDefault();
+
+    const form = e.target;
+    const email = form.email.value;
+    const token = form.querySelector('input[name="_token"]').value;
+    const messageEl = document.getElementById('newsletterMessage');
+
+    fetch("{{ route('newsletter.subscribe') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(async response => {
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            if (data.errors && data.errors.email) {
+                throw new Error(data.errors.email[0]);
+            }
+            throw new Error(data.message || 'Server error');
+        }
+
+        return data;
+    })
+    .then(data => {
+        messageEl.textContent = data.success;
+        messageEl.className = 'text-success mt-2';
+        form.reset();
+    })
+    .catch(err => {
+        messageEl.textContent = err.message;
+        messageEl.className = 'text-danger mt-2';
+    });
+
+});
+</script>
             </div>
 
         </div>

@@ -61,11 +61,11 @@ class CategoryController extends Controller
             return back()->with('success','Status Actived');
         }else{
             $category->update([
-                'status' => 'active',
+                'status' => 'deactive',
                 'updated_at' => now(),
             ]);
-            return back()->with('success','Status Actived');
-    }
+            return back()->with('success','Status Deactivated');
+        }
     }
     public function edit($slug){
         $category = Category::where('slug',$slug)->first();

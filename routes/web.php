@@ -3,8 +3,11 @@
 use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Frontend\AuthenticationController;
+use App\Http\Controllers\Frontend\CategoryProductController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ManagementController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +19,12 @@ Auth::routes();
 
 //home page start
 Route::get('/',[HomeController::class,'index'])->name('frontend.home');
+Route::get('/category/product/{slug}',[CategoryProductController::class,'index'])->name('category.product');
+Route::get('/product-search', [CategoryProductController::class,'search'])->name('product.search');
 //home page end
+//subcribe route start
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+//subcribe route end
 //authentication routes start
 Route::get('auth/login',[AuthenticationController::class,'login'])->name('auth.login');
 Route::post('auth/login',[AuthenticationController::class,'login_post'])->name('auth.login');
@@ -68,7 +76,10 @@ Route::middleware(['role_check'])->group(function(){
     //block users part end
 
 //dashboard management route end
-
+// newsletter subscribe route start
+Route::get('/subscribe', [NewsletterController::class, 'index'])->name('subscriber');
+Route::get('/subscribe/delete/{id}', [NewsletterController::class, 'delete'])->name('subscriber.delete');
+// newsletter subscribe route end
 //Account Settings Routes start
 Route::get('/home/account/settings',[AccountSettingsController::class,'index'])->name('home.account.settings');
 Route::post('name/update',[AccountSettingsController::class,'name_update'])->name('name.update');
@@ -89,7 +100,8 @@ Route::get('/category/delete/{slug}',[CategoryController::class,'delete'])->name
 //add product routes start
 Route::resource('/product',ProductController::class);
 Route::post('/product/status/{id}',[ProductController::class,'status'])->name('product.status');
+Route::post('/product/best/seller/{slug}',[ProductController::class,'best_seller'])->name('product.best.seller');
+Route::post('/product/banner/{id}',[ProductController::class,'banner'])->name('product.banner');
 //add product routes end
-
 // Backend Routes end
 });

@@ -23,6 +23,8 @@
                           <th scope="col">Category title</th>
                           <th scope="col">Price</th>
                           <th scope="col">Status</th>
+                          <th scope="col">Best Seller</th>
+                          <th scope="col">Banner</th>
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
@@ -52,6 +54,23 @@
                                 </div>
                             </form>
                              </td>
+                             <td>
+                                <form id="Ecommarce-{{ $product->slug }}" action="{{ route('product.best.seller', $product->slug) }}" method="post">
+                                        @csrf
+                                        <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
+                                        <input name="is_best_seller" value="1" onchange="document.getElementById('Ecommarce-{{ $product->slug }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->is_best_seller == 1 ? 'checked' : '' }} >
+                                        </div>
+                                </form>
+                                </td>
+
+                             <td>
+                                <form id="ecommarce-{{ $product->id }}" action="{{ route('product.banner', $product->id) }}" method="post">
+                                        @csrf
+                                        <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
+                                        <input name="is_banner" value="1" onchange="document.getElementById('ecommarce-{{ $product->id }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->is_banner == 1 ? 'checked' : '' }} >
+                                        </div>
+                                </form>
+                                </td>
                              <td class="d-flex gap-2">
                                 <a href="javascript:void(0)" type="button" class="btn btn-primary btn-sm" style="height: 35px"  data-bs-toggle="modal" data-bs-target="#showDetails{{ $product->id }}"><i class="fas fa-exclamation-circle"></i></a>
                                 <a href="{{ route('product.edit', $product->id) }}" class="btn btn-info btn-sm mb-4"><i class="far fa-edit"></i></a>
