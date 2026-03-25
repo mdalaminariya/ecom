@@ -40,3 +40,44 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        @if ($errors->any())
+            Toastify({
+                text: "{{ $errors->first() }}",
+                duration: 4000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #FF0112, #D21302)",
+            }).showToast();
+        @endif
+
+        @if (session('success'))
+            Toastify({
+                text: "{{ session('success') }}",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            }).showToast();
+        @endif
+
+        @if (session('error'))
+            Toastify({
+                text: "{{ session('error') }}",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #FF0112, #D21302)",
+            }).showToast();
+        @endif
+
+    });
+</script>
+@endsection

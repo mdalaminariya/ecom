@@ -6,7 +6,6 @@ use App\Http\Controllers\Frontend\AuthenticationController;
 use App\Http\Controllers\Frontend\CategoryProductController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ManagementController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use GuzzleHttp\Middleware;
@@ -68,7 +67,12 @@ Route::middleware(['role_check'])->group(function(){
     Route::post('/management/role/user/block/{id}', [ManagementController::class, 'assign_existing_role_user_block'])->name('management.assign.existing.role.user.block');
     Route::get('/management/role/user/delete/{id}', [ManagementController::class, 'assign_existing_role_user_delete'])->name('management.assign.existing.role.user.delete');
     //user part end
-
+    //ban user part start
+    Route::post('user/ban/{id}', [ManagementController::class, 'ban_user'])->name('management.user.ban');
+    Route::get('user/banned', [ManagementController::class, 'banned_users_show'])->name('management.user.banned');
+    Route::get('banned/user/delete/{id}', [ManagementController::class, 'banned_user_delete'])->name('management.banned.user.delete');
+    Route::post('user/unban/{id}', [ManagementController::class, 'unban_user'])->name('management.user.unban');
+    //ban user part end
     //block users part start
     Route::get('/management/block',[ManagementController::class, 'block_user'])->name('management.user.block');
     Route::post('/management/unblock/{id}',[ManagementController::class, 'unblock_user'])->name('management.user.unblock');
@@ -80,13 +84,6 @@ Route::middleware(['role_check'])->group(function(){
 Route::get('/subscribe', [NewsletterController::class, 'index'])->name('subscriber');
 Route::get('/subscribe/delete/{id}', [NewsletterController::class, 'delete'])->name('subscriber.delete');
 // newsletter subscribe route end
-//Account Settings Routes start
-Route::get('/home/account/settings',[AccountSettingsController::class,'index'])->name('home.account.settings');
-Route::post('name/update',[AccountSettingsController::class,'name_update'])->name('name.update');
-Route::post('email/update',[AccountSettingsController::class,'email_update'])->name('email.update');
-Route::post('dashboard/password/update',[AccountSettingsController::class,'password_update'])->name('dashboard.password.update');
-Route::post('dashboard/image/update',[AccountSettingsController::class,'image_update'])->name('dashboard.image.update');
-//Account Settings Routes end
 
 // Category Routes start
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');
@@ -105,3 +102,11 @@ Route::post('/product/banner/{id}',[ProductController::class,'banner'])->name('p
 //add product routes end
 // Backend Routes end
 });
+
+//Account Settings Routes start
+Route::get('/home/account/settings',[AccountSettingsController::class,'index'])->name('home.account.settings');
+Route::post('name/update',[AccountSettingsController::class,'name_update'])->name('name.update');
+Route::post('email/update',[AccountSettingsController::class,'email_update'])->name('email.update');
+Route::post('dashboard/password/update',[AccountSettingsController::class,'password_update'])->name('dashboard.password.update');
+Route::post('dashboard/image/update',[AccountSettingsController::class,'image_update'])->name('dashboard.image.update');
+//Account Settings Routes end

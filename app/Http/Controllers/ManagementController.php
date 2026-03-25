@@ -237,4 +237,36 @@ class ManagementController extends Controller
         }
     }
 
+    public function banned_users_show(){
+        $users = User::where('is_banned', true)->get();
+        return view('dashboard.management.banned.bannedUsers', compact('users'));
+    }
+
+ public function ban_user($id)
+{
+    $user = User::where('id', $id)->first();
+    $user->is_banned = true; // or 1, depending on your column
+    $user->save();
+
+    return redirect()->back()->with('success', 'User banned successfully!');
+}
+
+public function unban_user($id)
+{
+    $user = User::where('id', $id)->first();
+    $user->is_banned = false; // or 0
+    $user->save();
+
+    return redirect()->back()->with('success', 'User unbanned successfully!');
+}
+public function banned_user_delete($id)
+{
+    $user = User::where('id', $id)->first();
+    if ($user) {
+        $user->delete();
+        return redirect()->back()->with('success', 'Banned user deleted successfully!');
+    } else {
+        return redirect()->back()->withErrors(['error' => 'User not found.']);
+    }
+}
 }

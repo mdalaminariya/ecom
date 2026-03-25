@@ -16,7 +16,7 @@
         <form action="{{ route('name.update') }}" method="POST">
              @csrf
             <div class="form-floating mb-3">
-                   <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="floatingnameInput" placeholder="Enter Name" value="{{ old('name') }}">
+                   <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="floatingnameInput" placeholder="Enter Name" value="{{ old('name', auth()->user()->name) }}">
                    <label for="floatingnameInput">Name</label>
 
                   @error('name')
@@ -40,7 +40,7 @@
         <form action="{{ route('email.update') }}" method="POST">
              @csrf
             <div class="form-floating mb-3">
-                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="floatingnameInput" placeholder="Enter Email" value="{{ old('email') }}">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="floatingnameInput" placeholder="Enter Email" value="{{ old('email', auth()->user()->email) }}">
                 <label for="floatingnameInput">Email</label>
 
                 @error('email')
@@ -66,7 +66,7 @@
         <form action="{{ route('dashboard.password.update') }}" method="POST">
              @csrf
             <div class="form-floating mb-3">
-                <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" id="floatingnameInput" placeholder="Enter Email" value="{{ old('current_password') }}">
+                <input type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" id="floatingnameInput" placeholder="Enter Current Password" value="{{ old('current_password') }}">
                 <label for="floatingnameInput">Current Password</label>
 
                 @error('current_password')
@@ -121,8 +121,6 @@
   <!-- end card -->
 </div>
 {{-- image update end --}}
-              </div>
-            </div>
 
 @endsection
 

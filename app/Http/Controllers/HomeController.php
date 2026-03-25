@@ -33,11 +33,11 @@ class HomeController extends Controller
                         ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
                         ->sum('total_amount');
 
-    // Latest 5 Users
-    $newUsers = User::latest()->take(5)->get();
+    // Latest 10 Users
+    $newUsers = User::where('role', 'user')->where('is_banned', false)->latest()->take(10)->get();
 
-    // Latest 7 Orders
-    $recentOrders = Order::latest()->take(7)->get();
+    // Latest 10 Orders
+    $recentOrders = Order::latest()->take(10)->get();
 
     return view('dashboard.home.index', compact(
         'totalUsers',
@@ -46,7 +46,8 @@ class HomeController extends Controller
         'totalSales',
         'dailySales',
         'newUsers',
-        'recentOrders'
+        'recentOrders',
+
     ));
 }
 }

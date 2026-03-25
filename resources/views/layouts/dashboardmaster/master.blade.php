@@ -123,6 +123,12 @@
                             <span class="sub-item">Blocked User's</span>
                           </a>
                         </li>
+
+                        <li>
+                          <a href="{{ route('management.user.banned') }}">
+                            <span class="sub-item">Banned User's</span>
+                          </a>
+                        </li>
                       </ul>
                     </div>
                   </li>
@@ -473,10 +479,10 @@
                             />
                           </div>
                           <div class="u-text">
-                            <h4>Hizrian</h4>
-                            <p class="text-muted">hello@example.com</p>
+                            <h4>{{ auth()->user()->name }}</h4>
+                            <p class="text-muted">{{ auth()->user()->email }}</p>
                             <a
-                              href="profile.html"
+                              href="{{ route('home.account.settings') }}"
                               class="btn btn-xs btn-secondary btn-sm"
                               >View Profile</a
                             >
@@ -485,7 +491,7 @@
                       </li>
                       <li>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My Profile</a>
+                        <a class="dropdown-item" href="{{ route('home.account.settings') }}"> My Profile </a>
                         <a class="dropdown-item" href="#">My Balance</a>
                         <a class="dropdown-item" href="#">Inbox</a>
                         <div class="dropdown-divider"></div>
@@ -508,7 +514,11 @@
         </div>
         <!-- End Navbar -->
 
+ <div class="container mt-2">
+    <div class="page-inner pt-2 pb-0">
         @yield('content')
+    </div>
+</div>
 
         <footer class="footer">
           <div class="container-fluid d-flex justify-content-between">
