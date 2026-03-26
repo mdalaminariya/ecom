@@ -78,6 +78,15 @@
                                         </div>
                                  </div>
                           </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword3" class="col-sm-3 col-form-label">Specification</label>
+                                 <div class="col-sm-9">
+                                  <textarea id="specNote" type="text" name="specification" class="form-control @error('specification') is-invalid @enderror"></textarea>
+                                  <div class="invalid-feedback">
+                                            @error('specification') {{ $message }} @enderror
+                                        </div>
+                                 </div>
+                          </div>
                            <div class="mb-3">
                                  <img style="height: 35%; width: 35%; margin-left: 40%;" id="ecommerce" src="{{ asset('images/default/default.png') }}" alt="Select Thumbnail">
                             </div>
@@ -121,6 +130,13 @@
 <script>
     tinymce.init({
       selector: '#longNote',
+      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
+  </script>
+<script>
+    tinymce.init({
+      selector: '#specNote',
       plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
       toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
     });

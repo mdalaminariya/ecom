@@ -17,7 +17,7 @@
                                     <div class="banner_text">
                                         <div class="banner_text_iner">
 
-                                            <h1>{{ $product->title }}</h1>
+                                            <h1 href="{{ route('product.details', $product->slug) }}">{{ $product->title }}</h1>
 
                                             <p>{!! Str::limit($product->short_description ?? 'No description available', 30) !!}</p>
 
@@ -59,26 +59,50 @@
             </div>
         </div>
 
-        <div class="row flex-nowrap overflow-auto">
-            @forelse ($categories as $category)
+    <div class="row flex-nowrap overflow-auto py-4 px-2">
+    @forelse ($categories as $category)
         <div class="col-lg-3 col-md-4 col-6 mb-4">
-            <div class="single_feature_post_text text-center" style="background: none;">
-                <img style="width:100%; height:80%; margin-top: -20px;"
-                     src="{{ asset('images/category/'.$category->thumbnail) }}"
-                     alt="">
-                    <p><b>{{ $category->title }}</b> <span>{{ $category->oneproduct->count()}}</span></p>
-                <a href="{{ route('category.product', $category->slug) }}" class="feature_btn mt-3 d-inline-block">
-                    {{ $category->title }}
-                    <i class="fas fa-play"></i>
+            <div class="category-card text-center p-3 shadow-sm rounded">
+                <div class="category-image mb-2">
+                    <img src="{{ asset('images/category/'.$category->thumbnail) }}" alt="{{ $category->title }}">
+                </div>
+                <p class="mb-2"><b>{{ $category->title }}</b> <span class="badge bg-primary text-white">{{ $category->oneproduct->count()}}</span></p>
+                <a href="{{ route('category.product', $category->slug) }}" class="btn btn-outline-primary btn-sm mt-2">
+                    View Products <i class="fas fa-play ms-1"></i>
                 </a>
-
             </div>
         </div>
-
     @empty
-        <p class="text-center">No categories found</p>
-        @endforelse
-    </div>
+        <p class="text-center text-danger w-100"><b>No categories found</b></p>
+    @endforelse
+</div>
+
+<style>
+/* Card styling */
+.category-card {
+    background: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.category-image img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Horizontal scroll improvements */
+.row.flex-nowrap {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+</style>
 {{ $categories->links() }}
 
     </div>
@@ -100,7 +124,7 @@
                     <div class="product_list_slider owl-carousel">
                         <div class="single_product_list_slider">
                             <div class="row align-items-center justify-content-between">
-                                @foreach ($products as $product)
+                                @forelse ($products as $product)
                                 <div class="col-lg-3 col-sm-4">
                                       <div class="single_product_item">
                                           <img src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
@@ -110,11 +134,13 @@
                                                             $price = strip_tags($product->price); // removes <p> tags
                                                             @endphp
                                                         <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">  {{ $price }} </p>
-                                              <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                              <a href="{{ route('shopping.cart') }}" class="btn_3"><span style="margin-left: -20px; color: #fff;">+ add to cart</span><i class="ti-heart"></i></a>
                                           </div>
                                       </div>
                                     </div>
-                                    @endforeach
+                                    @empty
+                                        <p style="margin-left: 42%" class="text-danger"><b>No products found</b></p>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
@@ -182,12 +208,12 @@
                         <div class="single_product_item">
 
                             <!-- Product Image -->
-                            <img src="{{ asset('images/product/' . $product->thumbnail) }}" alt="{{ $product->title }}">
+                            <img  src="{{ asset('images/product/' . $product->thumbnail) }}" alt="{{ $product->title }}">
 
                             <!-- Product Info -->
                             <div class="single_product_text">
 
-                                <h4>{{ $product->title }}</h4>
+                                <h4><a href="{{ route('product.details', $product->slug) }}">{{ $product->title }}</a></h4>
 
                                 @php
                                     $price = strip_tags($product->price);

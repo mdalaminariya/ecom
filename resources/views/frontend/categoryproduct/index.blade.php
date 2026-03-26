@@ -27,15 +27,15 @@
                      <div class="blog_left_sidebar">
                          <article class="blog_item">
                              <div class="blog_item_img">
-                                 <img style="height: 50%; width: 50%;" class="card-img rounded-0" src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
-                                 <a href="#" class="blog_item_date">
+                                 <img href="{{ route('product.details', $product->slug) }}" style="height: 50%; width: 50%;" class="card-img rounded-0" src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
+                                 <a href="{{ route('product.details', $product->slug) }}" class="blog_item_date">
                                      <h3>{{ Carbon\Carbon::parse($product->created_at)->format('d') }}</h3>
                                      <p>{{ Carbon\Carbon::parse($product->created_at)->format('M') }}</p>
                                  </a>
                              </div>
 
                              <div class="blog_details">
-                                 <a class="d-inline-block" href="single-blog.html">
+                                 <a class="d-inline-block" href="{{ route('product.details', $product->slug) }}">
                                      <h2>{{ $product->title }}</h2>
                                     </a>
                                 @php

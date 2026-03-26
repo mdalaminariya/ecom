@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('price');
             $table->longText('short_description');
             $table->longText('description');
+            $table->longText('specification');
             $table->string('status')->default('deactive');
             $table->timestamps();
         });

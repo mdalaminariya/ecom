@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Frontend\AuthenticationController;
 use App\Http\Controllers\Frontend\CategoryProductController;
@@ -21,6 +22,15 @@ Route::get('/',[HomeController::class,'index'])->name('frontend.home');
 Route::get('/category/product/{slug}',[CategoryProductController::class,'index'])->name('category.product');
 Route::get('/product-search', [CategoryProductController::class,'search'])->name('product.search');
 //home page end
+//Shop category page start
+Route::get('/shop',[CategoryProductController::class,'shop'])->name('frontend.shop');
+//Shop category page end
+//shop cart page start
+Route::get('/shopping/cart',[CartController::class,'index'])->name('shopping.cart');
+//shop cart page end
+//Product details page start
+Route::get('/product/details/{slug}',[CategoryProductController::class,'product_details'])->name('product.details');
+//Product details page end
 //subcribe route start
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 //subcribe route end

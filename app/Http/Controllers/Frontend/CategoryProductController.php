@@ -40,4 +40,18 @@ class CategoryProductController extends Controller
 
         return view('frontend.search.index', compact('products','cats','search'));
     }
+
+    public function shop(){
+        $Categories = Category::where('status', 'active')->latest()->get();
+        $products = Product::where('status','active')->latest()->paginate(12);
+                $subscribed = false;
+        return view('frontend.shopCategory.index',compact('products','Categories','subscribed'));
+    }
+    public function product_details($slug){
+        $product = Product::where('slug', $slug)->first();
+        $cats = Category::where('status', 'active')->latest()->get();
+        $producs = Product::where('status','active')->latest()->take(4)->get();
+                $subscribed = false;
+        return view('frontend.productdetails.index',compact('product','cats','producs','subscribed'));
+    }
 }

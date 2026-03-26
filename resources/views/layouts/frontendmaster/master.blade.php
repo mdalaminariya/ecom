@@ -56,8 +56,7 @@
                                         Shop
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_1">
-                                        <a class="dropdown-item" href="#"> shop category</a>
-                                        <a class="dropdown-item" href="single-product.html">product details</a>
+                                        <a class="dropdown-item" href="{{ route('frontend.shop') }}"> shop category</a>
 
                                     </div>
                                 </li>
@@ -112,7 +111,7 @@
             </div>
         </div>
         <div class="search_input" id="search_input_box">
-            <div class="container ">
+            <div class="container">
                 <form class="d-flex justify-content-between search-inner">
                     <input type="text" class="form-control" id="search_input" placeholder="Search Here">
                     <button type="submit" class="btn"></button>
@@ -123,7 +122,9 @@
     </header>
     <!-- Header part end-->
 
+   <div style="margin-top: 5%" class="main-content">
     @yield('content')
+    </div>
 
         <!--::footer_part start::-->
     <footer class="footer_part">

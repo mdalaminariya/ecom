@@ -507,27 +507,39 @@ ul {
 
 /* line 38, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_button.scss */
 .btn_3 {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   padding: 9px 42px;
   border-radius: 50px;
   background-color: #ff3368;
-  border: 1px solid #ecfdff;
+  border: 1px solid #ff3368;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
   color: #fff;
   text-transform: uppercase;
-  font-weight: 400;
   box-shadow: -1.717px 8.835px 29.76px 2.24px rgba(255, 51, 104, 0.18);
-  border: 1px solid #ff3368;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
+  transition: 0.3s;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-/* line 52, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_button.scss */
+.btn_3 i {
+  font-size: 16px;
+  display: inline-block;
+  position: relative;
+  top: -22px;
+  left: 25px;                       /* lift icon slightly */
+  transition: top 0.3s;            /* animate top smoothly on hover */
+}
+
 .btn_3:hover {
-  background-color: red;
+  background-color: rgb(255, 0, 0);
   color: #fff;
 }
+
 
 /* line 57, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_button.scss */
 .btn_2 {

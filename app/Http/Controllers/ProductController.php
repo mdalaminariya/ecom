@@ -40,6 +40,7 @@ class ProductController extends Controller
             'title' => 'required',
             'price' => 'required',
             'short_description' => 'required',
+            'specification' => 'required',
             'description' => 'required',
             'thumbnail' => 'required|image',
         ]);
@@ -58,6 +59,7 @@ class ProductController extends Controller
                     'slug' => Str::slug($request->slug,'-'),
                     'price' => $request->price,
                     'short_description' => $request->short_description,
+                    'specification' => $request->specification,
                     'description' => $request->description,
                 ]);
                 return redirect()->route('product.index')->with('success','Product Created Successfully');
