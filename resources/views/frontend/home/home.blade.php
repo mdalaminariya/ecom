@@ -130,11 +130,9 @@
                                           <img src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
                                           <div class="single_product_text">
                                               <h4>{{ $product->title }}</h4>
-                                                          @php
-                                                            $price = strip_tags($product->price); // removes <p> tags
-                                                            @endphp
-                                                        <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">  {{ $price }} </p>
-                                              <a href="{{ route('shopping.cart') }}" class="btn_3"><span style="margin-left: -20px; color: #fff;">+ add to cart</span><i class="ti-heart"></i></a>
+
+                                                <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">  ${{ number_format($product->price,0) }} </p>
+                                              <a href="{{ route('cart.add', $product->id) }}" class="btn_3"><span style="margin-left: -20px; color: #fff;">+ add to cart</span><i class="ti-heart"></i></a>
                                           </div>
                                       </div>
                                     </div>
@@ -215,13 +213,9 @@
 
                                 <h4><a href="{{ route('product.details', $product->slug) }}">{{ $product->title }}</a></h4>
 
-                                @php
-                                    $price = strip_tags($product->price);
-                                @endphp
-
-                                <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">
-                                    {{ $price }}
-                                </p>
+                            <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">
+                                ${{ number_format($product->price, 0) }}
+                            </p>
 
                             </div>
 

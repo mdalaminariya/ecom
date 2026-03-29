@@ -69,7 +69,7 @@
                                         <a class="dropdown-item" href="{{ route('login') }}"> login</a>
                                         <a class="dropdown-item" href="tracking.html">tracking</a>
                                         <a class="dropdown-item" href="checkout.html">product checkout</a>
-                                        <a class="dropdown-item" href="cart.html">shopping cart</a>
+                                        <a class="dropdown-item" href="{{ route('shopping.cart') }}">shopping cart</a>
                                         <a class="dropdown-item" href="confirmation.html">confirmation</a>
                                         <a class="dropdown-item" href="elements.html">elements</a>
                                     </div>
@@ -90,22 +90,49 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="hearer_icon d-flex">
-                            <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>
-                            <a href=""><i class="ti-heart"></i></a>
-                            <div class="dropdown cart">
-                                <a class="dropdown-toggle" href="#" id="navbarDropdown3" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-cart-plus"></i>
-                                </a>
-                                <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <div class="single_product">
+         <div class="hearer_icon d-flex">
+    <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>
+    <a href="#"><i class="ti-heart"></i></a>
+<div class="cart-wrapper dropdown" style="position: relative;">
+    <a href="#" class="cart-icon" id="navbarDropdown3" data-toggle="dropdown" style="position: relative; display: inline-block;">
+        <i class="fas fa-shopping-cart"></i>
 
-                                    </div>
-                                </div> -->
+        @if($cartCount > 0)
+            <span class="cart-count">{{ $cartCount }}</span>
+        @endif
+    </a>
 
-                            </div>
-                        </div>
+    <div class="dropdown-menu dropdown-menu-right cart-dropdown p-3">
+        @if($cartCount > 0)
+            @foreach($cartItems as $item)
+                <div class="cart-item d-flex justify-content-between mb-2">
+                    <div>
+                        <img src="{{ asset('images/product/'.$item->product->thumbnail) }}" width="45">
+                        {{ $item->product->title }}
+                    </div>
+                    <div>
+                        x{{ $item->quantity }} <br>
+                        ${{ number_format($item->product->price * $item->quantity, 0) }}
+                    </div>
+                </div>
+            @endforeach
+
+            <hr>
+
+            <div class="d-flex justify-content-between">
+                <strong>Total:</strong>
+                <strong>${{ number_format($cartTotal, 0) }}</strong>
+            </div>
+
+            <a href="{{ route('shopping.cart') }}" class="btn btn-primary btn-sm w-100 mt-2">
+                View Cart
+            </a>
+        @else
+            <p class="text-center mb-0">Your cart is empty</p>
+        @endif
+    </div>
+</div>
+</div>
                     </nav>
                 </div>
             </div>

@@ -27,6 +27,9 @@ Route::get('/shop',[CategoryProductController::class,'shop'])->name('frontend.sh
 //Shop category page end
 //shop cart page start
 Route::get('/shopping/cart',[CartController::class,'index'])->name('shopping.cart');
+Route::get('/shopping/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/shopping/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/shopping/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 //shop cart page end
 //Product details page start
 Route::get('/product/details/{slug}',[CategoryProductController::class,'product_details'])->name('product.details');

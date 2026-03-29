@@ -44,7 +44,7 @@
                                 {!! $product->category->title !!}
                              </td>
                              <td>
-                                {!! $product->price !!}
+                               {{ $product->price }}
                              </td>
                              <td>
                             <form id="Ecommarce-{{ $product->id }}" action="{{ route('product.status', $product->id) }}" method="post">

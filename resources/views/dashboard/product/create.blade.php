@@ -54,7 +54,7 @@
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Price</label>
                                  <div class="col-sm-9">
-                                <textarea id="price" type="text" name="price" class="form-control @error('price') is-invalid @enderror"></textarea>
+                                <input type="integer" name="price" class="form-control @error('price') is-invalid @enderror">
                                    <div class="invalid-feedback">
                                             @error('price') {{ $message }} @enderror
                                         </div>
@@ -112,14 +112,6 @@
 @endsection
 
 @section('script')
-
-<script>
-    tinymce.init({
-      selector: '#price',
-      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-    });
-  </script>
   <script>
     tinymce.init({
       selector: '#shortNote',

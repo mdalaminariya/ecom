@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->string('title');
             $table->string('slug');
-            $table->string('price');
+            $table->integer('price')->unsigned();
             $table->longText('short_description');
             $table->longText('description');
             $table->longText('specification');

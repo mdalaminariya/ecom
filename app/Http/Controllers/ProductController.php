@@ -55,7 +55,7 @@ class ProductController extends Controller
                     'user_id' => auth()->user()->id,
                     'category_id' => $request->category_id,
                     'thumbnail' => $newname,
-                    'title' => $request->title,
+                    'title' => ucfirst($request->title),
                     'slug' => Str::slug($request->slug,'-'),
                     'price' => $request->price,
                     'short_description' => $request->short_description,
@@ -67,7 +67,7 @@ class ProductController extends Controller
                 Product::create([
                     'user_id' => auth()->user()->id,
                     'category_id' => $request->category_id,
-                    'title' => $request->title,
+                    'title' => ucfirst($request->title),
                     'slug' => Str::slug($request->title,'-'),
                     'price' => $request->price,
                     'short_description' => $request->short_description,
