@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\comment;
 use App\Models\Newsletter;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -47,11 +48,16 @@ class CategoryProductController extends Controller
                 $subscribed = false;
         return view('frontend.shopCategory.index',compact('products','Categories','subscribed'));
     }
-    public function product_details($slug){
-        $product = Product::where('slug', $slug)->first();
-        $cats = Category::where('status', 'active')->latest()->get();
-        $producs = Product::where('status','active')->latest()->take(4)->get();
-                $subscribed = false;
-        return view('frontend.productdetails.index',compact('product','cats','producs','subscribed'));
-    }
+ public function product_details($slug)
+{
+    $product = Product::where('slug', $slug)->first();
+    $cats = Category::where('status', 'active')->latest()->get();
+    $producs = Product::where('status', 'active')->latest()->take(4)->get();
+    $subscribed = false;
+
+    // Load top-level comments and nested replies for this product
+    $comments = Comment::where('product_id', $product->id)->whereNull('parent_id')->with('replies')->latest()->paginate(5);
+
+    return view('frontend.productdetails.index', compact('product', 'cats', 'producs', 'subscribed', 'comments'));
+}
 }

@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="card-list py-4">
-                    @foreach($newUsers as $newUser)
+                    @forelse($newUsers as $newUser)
                         <div class="item-list">
                             <div class="avatar">
                                 @if($newUser->avatar)
@@ -240,11 +240,13 @@
             </button>
         </form>
                         </div>
-                    @endforeach
-
-                    @if($newUsers->isEmpty())
-                        <p class="text-center text-muted">No new users</p>
-                    @endif
+                    @empty
+                        <td class="text-center" colspan="5">
+                            <div class="alert alert-warning text-center mb-0" role="alert">
+                                No new users found.
+                            </div>
+                        </td>
+                    @endforelse
                 </div>
             </div>
         </div>

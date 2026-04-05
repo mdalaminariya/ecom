@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Frontend\AuthenticationController;
 use App\Http\Controllers\Frontend\CategoryProductController;
+use App\Http\Controllers\Frontend\CheckOutController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\NewsletterController;
@@ -31,9 +34,17 @@ Route::get('/shopping/cart/add/{id}', [CartController::class, 'addToCart'])->nam
 Route::post('/shopping/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/shopping/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 //shop cart page end
+//product Checkout page start
+Route::get('/product/checkout',[CheckOutController::class,'checkout'])->name('product.checkout');
+//product Checkout page end
+// Place order route
+Route::post('/checkout/place-order', [CheckOutController::class, 'placeOrder'])->name('checkout.placeOrder');
 //Product details page start
 Route::get('/product/details/{slug}',[CategoryProductController::class,'product_details'])->name('product.details');
 //Product details page end
+//comment route start
+Route::post('/comments/store',[CommentController::class,'store'])->name('comments.store');
+//comment route end
 //subcribe route start
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 //subcribe route end
@@ -80,12 +91,14 @@ Route::middleware(['role_check'])->group(function(){
     Route::post('/management/role/user/block/{id}', [ManagementController::class, 'assign_existing_role_user_block'])->name('management.assign.existing.role.user.block');
     Route::get('/management/role/user/delete/{id}', [ManagementController::class, 'assign_existing_role_user_delete'])->name('management.assign.existing.role.user.delete');
     //user part end
+
     //ban user part start
     Route::post('user/ban/{id}', [ManagementController::class, 'ban_user'])->name('management.user.ban');
     Route::get('user/banned', [ManagementController::class, 'banned_users_show'])->name('management.user.banned');
     Route::get('banned/user/delete/{id}', [ManagementController::class, 'banned_user_delete'])->name('management.banned.user.delete');
     Route::post('user/unban/{id}', [ManagementController::class, 'unban_user'])->name('management.user.unban');
     //ban user part end
+
     //block users part start
     Route::get('/management/block',[ManagementController::class, 'block_user'])->name('management.user.block');
     Route::post('/management/unblock/{id}',[ManagementController::class, 'unblock_user'])->name('management.user.unblock');
@@ -93,10 +106,16 @@ Route::middleware(['role_check'])->group(function(){
     //block users part end
 
 //dashboard management route end
+
 // newsletter subscribe route start
 Route::get('/subscribe', [NewsletterController::class, 'index'])->name('subscriber');
 Route::get('/subscribe/delete/{id}', [NewsletterController::class, 'delete'])->name('subscriber.delete');
 // newsletter subscribe route end
+
+//comment management route start
+Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+Route::get('/comments/delete/{id}', [CommentController::class, 'delete'])->name('comments.delete');
+//comment management route end
 
 // Category Routes start
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');
@@ -113,6 +132,11 @@ Route::post('/product/status/{id}',[ProductController::class,'status'])->name('p
 Route::post('/product/best/seller/{slug}',[ProductController::class,'best_seller'])->name('product.best.seller');
 Route::post('/product/banner/{id}',[ProductController::class,'banner'])->name('product.banner');
 //add product routes end
+
+//blog routes start
+Route::resource('/blog',BlogController::class);
+Route::post('/blog/status/{id}',[BlogController::class,'status'])->name('blog.status');
+//blog routes end
 // Backend Routes end
 });
 

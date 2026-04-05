@@ -28,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach ($categories as $category)
+                        @forelse ($categories as $category)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>
@@ -53,7 +53,13 @@
                                     <a href="{{ route('category.delete', $category->slug) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                                 </td>
                             </tr>
-                        @endforeach
+                            @empty
+                            <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No categories found. Please add categories.
+                                </div>
+                            </td>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>

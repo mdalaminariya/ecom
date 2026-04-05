@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/slick.css">
     <!-- style CSS -->
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/style.css">
+    {{-- font awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -68,20 +70,24 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
                                         <a class="dropdown-item" href="{{ route('login') }}"> login</a>
                                         <a class="dropdown-item" href="tracking.html">tracking</a>
-                                        <a class="dropdown-item" href="checkout.html">product checkout</a>
+                                        <a class="dropdown-item" href="{{ route('product.checkout') }}">product checkout</a>
                                         <a class="dropdown-item" href="{{ route('shopping.cart') }}">shopping cart</a>
                                         <a class="dropdown-item" href="confirmation.html">confirmation</a>
                                         <a class="dropdown-item" href="elements.html">elements</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="blog.html" id="navbarDropdown_2"
+                                    <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="{{ route('blog.index') }}" id="navbarDropdown_2"
                                         role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        blog
+                                        Blog
                                     </a>
+
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                                        <a class="dropdown-item" href="blog.html"> blog</a>
-                                        <a class="dropdown-item" href="single-blog.html">Single blog</a>
+                                        @foreach ($blogs as $blog)
+                                            <a class="dropdown-item" href="{{ route('blog.show', $blog) }}">
+                                                Blogs
+                                            </a>
+                                        @endforeach
                                     </div>
                                 </li>
 
@@ -92,9 +98,8 @@
                         </div>
          <div class="hearer_icon d-flex">
     <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a>
-    <a href="#"><i class="ti-heart"></i></a>
 <div class="cart-wrapper dropdown" style="position: relative;">
-    <a href="#" class="cart-icon" id="navbarDropdown3" data-toggle="dropdown" style="position: relative; display: inline-block;">
+    <a href="{{ route('shopping.cart') }}" class="cart-icon" id="navbarDropdown3" data-toggle="dropdown" style="position: relative; display: inline-block;">
         <i class="fas fa-shopping-cart"></i>
 
         @if($cartCount > 0)
@@ -325,6 +330,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="{{ asset('frontend') }}/assets/js/mail-script.js"></script>
     <!-- custom js -->
     <script src="{{ asset('frontend') }}/assets/js/custom.js"></script>
+
+    <script>
+    function toggleReply(id) {
+        let form = document.getElementById('reply-form-' + id);
+
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+</script>
 </body>
 
 </html>

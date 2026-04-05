@@ -40,9 +40,9 @@
     <link rel="stylesheet" href="{{ asset('dashboard') }}/assets/css/plugins.min.css" />
     <link rel="stylesheet" href="{{ asset('dashboard') }}/assets/css/kaiadmin.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('dashboard') }}/assets/css/demo.css" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     // TinyMCE Editor CDN link
     <script src="https://cdn.tiny.cloud/1/9fok538z63ejkbg4f2ghvqy5xlh9261qil4x73sn89bkq5w8/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
@@ -140,7 +140,7 @@
         @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'manager' || auth()->user()->role == 'seller')
                   <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#product">
-                      <i class="fab fa-blogger"></i>
+                      <i class="fas fa-warehouse"></i>
                       <p>Product</p>
                       <span class="caret"></span>
                     </a>
@@ -162,7 +162,30 @@
                   </li>
         @endif
                 {{-- Product Route link end --}}
+                  @if (auth()->user()->role == 'admin'|| auth()->user()->role == 'manager' || auth()->user()->role == 'seller')
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#blog">
+                      <i class="fab fa-blogger"></i>
+                      <p>Blog</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="blog">
+                      <ul class="nav nav-collapse">
+                        <li>
+                          <a href="{{ route('blog.index') }}">
+                            <span class="sub-item">Show Blog</span>
+                          </a>
+                        </li>
 
+                        <li>
+                          <a href="{{ route('blog.create') }}">
+                            <span class="sub-item">Create Blog</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+        @endif
                {{-- Category Route link start --}}
              @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
               <li class="nav-item">
@@ -193,6 +216,18 @@
                 </li>
                 @endif
                 {{-- SubscriberRoute link end --}}
+
+                {{-- comment Route Link start --}}
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
+                <li class="nav-item">
+                <a href="{{ route('comments.index') }}">
+                    <i class="fas fa-comments"></i>
+                    <p>Comments</p>
+                </a>
+                </li>
+                @endif
+                {{-- comment Route Link end --}}
+
               {{-- Account Settings Route link start --}}
               <li class="nav-item">
                 <a href="{{ route('home.account.settings') }}">

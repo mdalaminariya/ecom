@@ -102,9 +102,11 @@
                              @endif
                            </tr>
                            @empty
-                           <tr>
-                             <td colspan="5" class="text-danger text-center">Please Insert Data.!</td>
-                           </tr>
+                           <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No sellers found. Please add sellers.
+                                </div>
+                           </td>
                      @endforelse
                       </tbody>
                     </table>
@@ -159,9 +161,11 @@
                              @endif
                            </tr>
                            @empty
-                           <tr>
-                             <td colspan="5" class="text-danger text-center">Please Insert Data.!</td>
-                           </tr>
+                             <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No users found. Please add users.
+                                </div>
+                             </td>
                      @endforelse
                       </tbody>
                     </table>

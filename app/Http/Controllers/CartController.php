@@ -9,8 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function index(){
-    $cart = session()->get('cart', []);
+ public function index()
+{
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    $cart = Cart::where('user_id', Auth::id())
+                ->with('product')
+                ->get();
+
     return view('frontend.shoppingCart.index', compact('cart'));
 }
 // Add a product to cart

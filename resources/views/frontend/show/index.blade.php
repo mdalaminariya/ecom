@@ -34,7 +34,7 @@
          <p style="margin-top: -30px">{!! $product->short_description !!}</p>
          <ul class="blog-info-link">
             <li><a href="#"><i class="far fa-user"></i> {{ $product->user->name }} | {{ $product->user->role }}</a></li>
-             <li><a href="#"><i class="far fa-comments"></i> 03 Comments</a></li>
+             <li><a href="#"><i class="far fa-comments"></i> {{ $product->comments->count() }} Comments</a></li>
             </ul>
               <!-- Buy Button -->
             <a href="#" class="btn btn-success mt-2">

@@ -53,9 +53,11 @@
                              @endif
                            </tr>
                            @empty
-                           <tr>
-                             <td colspan="5" class="text-danger text-center">Please Insert Data.!</td>
-                           </tr>
+                           <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No blocked users found.
+                                </div>
+                           </td>
                      @endforelse
                       </tbody>
                     </table>

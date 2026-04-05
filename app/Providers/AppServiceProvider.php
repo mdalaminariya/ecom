@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Blog;
 use App\Models\Cart;
 
 class AppServiceProvider extends ServiceProvider
@@ -44,6 +45,10 @@ class AppServiceProvider extends ServiceProvider
     }
 
     $view->with(compact('cartItems', 'cartCount', 'cartTotal'));
+
+      View::composer('*', function ($view) {
+        $view->with('blogs', Blog::latest()->take(5)->get());
+    });
 });
     }
 }

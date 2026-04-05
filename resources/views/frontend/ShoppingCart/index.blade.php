@@ -29,6 +29,7 @@
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -61,10 +62,6 @@ $subtotal = 0;
             </form>
         </td>
         <td>${{ number_format($total, 0) }}</td>
-        <tr>
-    <td colspan="3"><strong>Subtotal</strong></td>
-    <td><strong>${{ number_format($subtotal, 0) }}</strong></td>
-    </tr>
         <td>
             <form action="{{ route('cart.remove') }}" method="POST">
                 @csrf
@@ -72,6 +69,10 @@ $subtotal = 0;
                 <button type="submit">Remove</button>
             </form>
         </td>
+        <tr>
+    <td colspan="3"><strong>Subtotal</strong></td>
+    <td><strong>${{ number_format($subtotal, 0) }}</strong></td>
+    </tr>
     </tr>
 @empty
     <tr>
@@ -81,8 +82,8 @@ $subtotal = 0;
             </tbody>
           </table>
           <div class="checkout_btn_inner float-right">
-            <a class="btn_1" href="#">Continue Shopping</a>
-            <a class="btn_1 checkout_btn_1" href="#">Proceed to checkout</a>
+            <a class="btn_1" href="{{ route('frontend.home') }}">Continue Shopping</a>
+            <a class="btn_1 checkout_btn_1" href="{{ route('product.checkout') }}">Proceed to checkout</a>
           </div>
         </div>
       </div>

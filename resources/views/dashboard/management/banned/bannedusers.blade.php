@@ -10,7 +10,7 @@
           <div class="col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Block User's Table</div>
+                    <div class="card-title">Banned User's Table</div>
                   </div>
                   <div class="card-body">
                     <table class="table table-head-bg-success">
@@ -52,9 +52,11 @@
                              @endif
                            </tr>
                            @empty
-                           <tr>
-                             <td colspan="5" class="text-danger text-center">Please Insert Data.!</td>
-                           </tr>
+                           <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No banned users found.
+                                </div>
+                           </td>
                      @endforelse
                       </tbody>
                     </table>

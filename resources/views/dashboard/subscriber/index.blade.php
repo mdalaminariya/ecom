@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($subscribers as $subscriber)
+                            @forelse($subscribers as $subscriber)
                             <tr>
                                  <th scope="row">
                                 {{ $loop->index + 1 }}
@@ -32,7 +32,13 @@
                                 <a href="{{ route('subscriber.delete',$subscriber->id) }}" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <td class="text-center" colspan="5">
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    No subscribers found.
+                                </div>
+                            </td>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

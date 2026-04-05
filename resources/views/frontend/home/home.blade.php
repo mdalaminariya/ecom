@@ -21,7 +21,7 @@
 
                                             <p>{!! Str::limit($product->short_description ?? 'No description available', 30) !!}</p>
 
-                                            <a href="#" class="btn_2">
+                                            <a href="{{ route('product.details', $product->slug) }}" class="btn_2">
                                                 Buy Now
                                             </a>
 
@@ -30,7 +30,7 @@
                                 </div>
 
                                 <div class="banner_img d-flex justify-content-end align-items-center">
-                                    <img style="width: 80%; height: 80%;" src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
+                                    <img style="width: 70%; height: 80%;" src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
                                 </div>
 
                             </div>
@@ -126,16 +126,23 @@
                             <div class="row align-items-center justify-content-between">
                                 @forelse ($products as $product)
                                 <div class="col-lg-3 col-sm-4">
-                                      <div class="single_product_item">
-                                          <img src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="">
-                                          <div class="single_product_text">
-                                              <h4>{{ $product->title }}</h4>
-
-                                                <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">  ${{ number_format($product->price,0) }} </p>
-                                              <a href="{{ route('cart.add', $product->id) }}" class="btn_3"><span style="margin-left: -20px; color: #fff;">+ add to cart</span><i class="ti-heart"></i></a>
-                                          </div>
-                                      </div>
-                                    </div>
+    <div class="single_product_item">
+        <a href="{{ route('product.details', ['slug' => $product->slug]) }}">
+            <img src="{{ asset('images/product/' . $product->thumbnail) }}" alt="{{ $product->title }}">
+        </a>
+        <div class="single_product_text">
+            <h4>
+                <a href="{{ route('product.details', ['slug' => $product->slug]) }}">{{ $product->title }}</a>
+            </h4>
+            <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">
+                ${{ number_format($product->price,0) }}
+            </p>
+            <a href="{{ route('cart.add', $product->id) }}" class="btn_3">
+                <span style="margin-left: -20px; color: #fff;">+ add to cart</span><i class="ti-heart"></i>
+            </a>
+        </div>
+    </div>
+</div>
                                     @empty
                                         <p style="margin-left: 42%" class="text-danger"><b>No products found</b></p>
                                     @endforelse
@@ -206,7 +213,7 @@
                         <div class="single_product_item">
 
                             <!-- Product Image -->
-                            <img  src="{{ asset('images/product/' . $product->thumbnail) }}" alt="{{ $product->title }}">
+                            <a href="{{ route('product.details', $product->slug) }}"> <img src="{{ asset('images/product/' . $product->thumbnail) }}" alt=""></a>
 
                             <!-- Product Info -->
                             <div class="single_product_text">

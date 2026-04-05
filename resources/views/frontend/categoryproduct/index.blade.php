@@ -47,7 +47,7 @@
                                     <p style="margin-top: -30PX">{!! $product->short_description !!}</p>
                                  <ul class="blog-info-link mb-2">
                                      <li><a href="#"><i class="far fa-user"></i> {{ $product->user->name }} | {{ $product->user->role }}</a></li>
-                                     <li><a href="#"><i class="far fa-comments"></i> 03 Comments</a></li>
+                                     <li><a href="#"><i class="far fa-comments"></i> {{ $product->product_comments->count() }} Comments</a></li>
                                  </ul>
                                    <!-- Buy Button -->
                                     <a href="#" class="btn btn-success mt-2">
@@ -82,8 +82,9 @@
                             @foreach ($cats as $cat)
                                 <ul class="list cat-list">
                                     <li>
-                                        <a href="#" class="d-flex">
-                                            <p>{{ $cat->title }}</p>
+                                        <a href="{{ route('category.product', $cat->slug) }}" class="d-flex">
+                                            <img src="{{ asset('images/category/' . $cat->thumbnail) }}" alt="{{ $cat->title }}" width="50">
+                                            <p class="mx-2">{{ $cat->title }}</p>
                                             <p> ({{ $cat->oneproduct->count() }})</p>
                                         </a>
                                     </li>
@@ -99,8 +100,9 @@
                                     <div class="media-body">
                                         <a href="single-blog.html">
                                             <h3>{{ $product->title }}</h3>
+                                            <h3>{!! Str::limit($product->short_description, 30) !!}</h3>
                                         </a>
-                                        <p>{{ $product->created_at->diffForHumans() }}</p>
+                                        <p>{{ $product->created_at->format('M j, Y') }}</p>
                                     </div>
                                 </div>
                             @endforeach

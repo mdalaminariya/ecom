@@ -8,108 +8,178 @@
 <x-breadcum aranoz="Product List"></x-breadcum>
 
 <div class="row">
-      <div class="col-lg-11" style="margin-left: 4%">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">Product Table</div>
-                  </div>
-                  <div class="card-body">
-                    <table class="table table-head-bg-success">
-                      <thead>
-                        <tr>
-                          <th scope="col">No.</th>
-                          <th scope="col">Thumbnail</th>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category title</th>
-                          <th scope="col">Price</th>
-                          <th scope="col">Status</th>
-                          <th scope="col">Best Seller</th>
-                          <th scope="col">Banner</th>
-                          <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                     @foreach ($products as $product)
-                           <tr style="border: 1px solid rgba(26, 21, 21, 0.123);">
-                             <th scope="row">
-                                {{ $loop->index + 1 }}
-                            </th>
-                             <td>
-                                <img src="{{ asset('images/product/'.$product->thumbnail) }}" style="width: 50px; height: 25px;">
-                             </td>
-                             <td>
-                                {{ $product->title }}
-                             </td>
-                             <td>
-                                {!! $product->category->title !!}
-                             </td>
-                             <td>
-                               {{ $product->price }}
-                             </td>
-                             <td>
-                            <form id="Ecommarce-{{ $product->id }}" action="{{ route('product.status', $product->id) }}" method="post">
-                                    @csrf
-                                <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
-                                    <input onchange="document.getElementById('Ecommarce-{{ $product->id }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->status == 'active' ? 'checked' : '' }}>
-                                </div>
-                            </form>
-                             </td>
-                             <td>
-                                <form id="Ecommarce-{{ $product->slug }}" action="{{ route('product.best.seller', $product->slug) }}" method="post">
-                                        @csrf
-                                        <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
-                                        <input name="is_best_seller" value="1" onchange="document.getElementById('Ecommarce-{{ $product->slug }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->is_best_seller == 1 ? 'checked' : '' }} >
-                                        </div>
-                                </form>
-                                </td>
+    <div class="col-lg-12">
+        <div class="card shadow-sm">
 
-                             <td>
-                                <form id="ecommarce-{{ $product->id }}" action="{{ route('product.banner', $product->id) }}" method="post">
-                                        @csrf
-                                        <div class="form-check form-switch btn-lg" style="margin-top: -2rem; margin-left: -1rem;">
-                                        <input name="is_banner" value="1" onchange="document.getElementById('ecommarce-{{ $product->id }}').submit()" class="form-check-input" type="checkbox" role="switch" {{ $product->is_banner == 1 ? 'checked' : '' }} >
-                                        </div>
-                                </form>
-                                </td>
-                             <td class="d-flex gap-2">
-                                <a href="javascript:void(0)" type="button" class="btn btn-primary btn-sm" style="height: 35px"  data-bs-toggle="modal" data-bs-target="#showDetails{{ $product->id }}"><i class="fas fa-exclamation-circle"></i></a>
-                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-info btn-sm mb-4"><i class="far fa-edit"></i></a>
-                                <form action="{{ route('product.destroy', $product->id) }}" method="post">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Product Table</h5>
+            </div>
+
+            <div class="card-body table-responsive">
+                <table class="table table-hover align-middle text-center">
+
+                    <thead class="table-success">
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Best</th>
+                            <th>Banner</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse ($products as $product)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+
+                            <td>
+                                <img src="{{ asset('images/product/'.$product->thumbnail) }}"
+                                     class="img-thumbnail"
+                                     style="width: 60px; height: 60px; object-fit: cover;">
+                            </td>
+
+                            <td>{{ $product->title }}</td>
+
+                            <td>{{ $product->category->title ?? '-' }}</td>
+
+                            <td><strong>৳{{ $product->price }}</strong></td>
+
+                            <!-- STATUS -->
+                            <td>
+                                <form id="status-{{ $product->id }}" action="{{ route('product.status', $product->id) }}" method="POST">
                                     @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-danger btn-sm mb-4"><i class="far fa-trash-alt"></i></button>
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               onchange="this.form.submit()"
+                                               {{ $product->status == 'active' ? 'checked' : '' }}>
+                                    </div>
                                 </form>
-                             </td>
-                           </tr>
-                           <!-- Modal -->
-                                <div class="modal fade" id="showDetails{{ $product->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
+                            </td>
+
+                            <!-- BEST SELLER -->
+                            <td>
+                                <form id="best-{{ $product->id }}" action="{{ route('product.best.seller', $product->slug) }}" method="POST">
+                                    @csrf
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="is_best_seller"
+                                               value="1"
+                                               onchange="this.form.submit()"
+                                               {{ $product->is_best_seller ? 'checked' : '' }}>
+                                    </div>
+                                </form>
+                            </td>
+
+                            <!-- BANNER -->
+                            <td>
+                                <form id="banner-{{ $product->id }}" action="{{ route('product.banner', $product->id) }}" method="POST">
+                                    @csrf
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="is_banner"
+                                               value="1"
+                                               onchange="this.form.submit()"
+                                               {{ $product->is_banner ? 'checked' : '' }}>
+                                    </div>
+                                </form>
+                            </td>
+
+                            <!-- ACTIONS -->
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <!-- View -->
+                                    <button class="btn btn-sm btn-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#showDetails{{ $product->id }}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+
+                                    <!-- Edit -->
+                                    <a href="{{ route('product.edit', $product->id) }}"
+                                       class="btn btn-sm btn-info">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <!-- Delete -->
+                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Delete this product?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- MODAL -->
+                        <div class="modal fade" id="showDetails{{ $product->id }}" tabindex="-1">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="showDetails{{ $product->id }}">{{ $product->id }} - {{ $product->title }}</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-bs-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                        <h5 class="modal-title">
+                                            {{ $product->title }}
+                                        </h5>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body text-center">
+                                        <img src="{{ asset('images/product/'.$product->thumbnail) }}"
+                                             class="img-fluid mb-3"
+                                             style="max-height: 200px; object-fit: cover;">
+
+                                        <h4>${{ $product->price }}</h4>
+
+                                        <p class="text-muted mt-3">
+                                            {!! $product->description !!}
+                                        </p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <a href="{{ route('product.edit', $product->id) }}"
+                                           class="btn btn-primary">
+                                            Edit Product
+                                        </a>
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
                                         </button>
                                     </div>
-                                    <div class="modal-body">
-                                        <img style="height: 40%; width: 40%; margin-left: 30%;" id="ecommerce" src="{{ asset('images/product/'.$product->thumbnail) }}" alt="Select Thumbnail">
-                                        <h2>Title {!! $product->title !!}</h2>
-                                        <h2>Price {!! $product->price !!}</h2>
-                                        <p>Description {!!$product->description !!}</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <a href="{{ route('product.edit', $product->id) }}" type="button" class="btn btn-primary">changes</a>
-                                    </div>
-                                    </div>
+
                                 </div>
+                            </div>
+                        </div>
+
+                        @empty
+                        <tr>
+                            <td colspan="9">
+                                <div class="alert alert-warning mb-0">
+                                    No products found. Please add products.
                                 </div>
-                     @endforeach
-                      </tbody>
-                    </table>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+
+                <div class="mt-3">
                     {{ $products->links() }}
-                  </div>
                 </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
