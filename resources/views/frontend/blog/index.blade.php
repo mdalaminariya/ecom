@@ -201,17 +201,27 @@
 
 
                         <aside class="single_sidebar_widget newsletter_widget">
-                            <h4 class="widget_title">Newsletter</h4>
+    <h4 class="widget_title">Newsletter</h4>
 
-                            <form action="#">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" onfocus="this.placeholder = ''"
-                                        onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
-                                </div>
-                                <button class="button rounded-0 primary-bg text-white w-100 btn_1"
-                                    type="submit">Subscribe</button>
-                            </form>
-                        </aside>
+    <form id="newsletterForm">
+        @csrf
+        <div class="form-group">
+            <input type="email" name="email" class="form-control"
+                placeholder="Enter email" required>
+        </div>
+
+        <button class="button rounded-0 primary-bg text-white w-100 btn_1">
+            Subscribe
+        </button>
+    </form>
+
+    <p id="newsletterMessage" class="mt-2"></p>
+</aside>
+@else
+<div class="alert alert-success" style="height: 50px">
+    ✅ You are already subscribed to our newsletter
+</div>
+@endif
                     </div>
                 </div>
             </div>
