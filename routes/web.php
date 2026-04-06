@@ -45,6 +45,11 @@ Route::get('/product/details/{slug}',[CategoryProductController::class,'product_
 //comment route start
 Route::post('/comments/store',[CommentController::class,'store'])->name('comments.store');
 //comment route end
+// Frontend blog routes
+Route::get('/blogs', [BlogController::class, 'list'])->name('blog.list');
+Route::get('/blogs/{slug}', [BlogController::class, 'blog_details'])->name('blog.details');
+// Frontend blog details route
+    Route::post('/blog/{blog}/comment', [BlogController::class, 'storeComment'])->name('blog.comment.store')->middleware('auth');
 //subcribe route start
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 //subcribe route end
@@ -112,10 +117,15 @@ Route::get('/subscribe', [NewsletterController::class, 'index'])->name('subscrib
 Route::get('/subscribe/delete/{id}', [NewsletterController::class, 'delete'])->name('subscriber.delete');
 // newsletter subscribe route end
 
-//comment management route start
+//product comment management route start
 Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
 Route::get('/comments/delete/{id}', [CommentController::class, 'delete'])->name('comments.delete');
-//comment management route end
+//product comment management route end
+
+//Blog comment management route start
+Route::get('/blog/comments/blog',[BlogController::class,'blog_comments'])->name('blog.comments');
+Route::get('/blog/comments/delete/{id}',[BlogController::class,'blog_comments_delete'])->name('blog.comments.delete');
+//Blog comment management route end
 
 // Category Routes start
 Route::get('/category',[CategoryController::class,'index'])->name('category.index');
@@ -133,10 +143,21 @@ Route::post('/product/best/seller/{slug}',[ProductController::class,'best_seller
 Route::post('/product/banner/{id}',[ProductController::class,'banner'])->name('product.banner');
 //add product routes end
 
-//blog routes start
-Route::resource('/blog',BlogController::class);
-Route::post('/blog/status/{id}',[BlogController::class,'status'])->name('blog.status');
-//blog routes end
+// Blog routes
+Route::prefix('blog')->group(function () {
+    // Dashboard CRUD
+    Route::get('/', [BlogController::class, 'index'])->name('blog.index');           // list blogs
+    Route::get('/create', [BlogController::class, 'create'])->name('blog.create');    // create form
+    Route::post('/', [BlogController::class, 'store'])->name('blog.store');           // store blog
+    Route::get('/{blog}/edit', [BlogController::class, 'edit'])->name('blog.edit');   // edit form
+    Route::put('/{blog}', [BlogController::class, 'update'])->name('blog.update');    // update blog
+    Route::delete('/{blog}', [BlogController::class, 'destroy'])->name('blog.destroy'); // delete blog
+
+    // Blog comments
+
+    // Custom frontend routes
+    Route::post('/status/{id}', [BlogController::class,'status'])->name('blog.status');      // toggle status
+    });
 // Backend Routes end
 });
 

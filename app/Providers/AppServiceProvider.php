@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\Blog;
 use App\Models\Cart;
 
@@ -50,5 +51,10 @@ class AppServiceProvider extends ServiceProvider
         $view->with('blogs', Blog::latest()->take(5)->get());
     });
 });
+
+    View::composer('layouts.frontendmaster.master', function ($view) {
+        $view->with('blogs', Blog::all());
+    });
+
     }
 }

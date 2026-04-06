@@ -28,7 +28,7 @@
                 @php
                 $price = strip_tags($product->price); // removes <p> tags
                 @endphp
-            <h2>{{ $price }}</h2>
+            <h2>${{ $price }}</h2>
             <ul class="list">
               <li>
                 <a class="active" href="#">

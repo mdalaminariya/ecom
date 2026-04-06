@@ -21,6 +21,8 @@
                             <th scope="col" style="width:10%;">Image</th>
                             <th scope="col" style="width:15%;">Name</th>
                             <th scope="col" style="width:20%;">Email</th>
+                            <th scope="col" style="width:20%;">Role</th>
+                            <th scope="col" style="width:20%;">Blog Title</th>
                             <th scope="col" style="width:40%;">Comment</th>
                             <th scope="col" style="width:10%;">Action</th>
                         </tr>
@@ -39,11 +41,13 @@
                                     <img src="{{ asset('images/default/default.png') }}" class="img-thumbnail" style="width:50px; height:50px; object-fit:cover;">
                                 @endif
                             </td>
-                            <td>{{ $comment->name }}</td>
-                            <td>{{ $comment->email }}</td>
+                            <td>{{ $comment->user->name }}</td>
+                            <td>{{ $comment->user->email }}</td>
+                            <td>{{ $comment->user->role }}</td>
+                            <td>{{ $comment->blog->title }}</td>
                             <td style="max-width: 400px; overflow-wrap: break-word;">{{ $comment->message }}</td>
                             <td class=" justify-content-center">
-                                    <a href="{{ route('comments.delete', $comment->id) }}" class="btn btn-danger btn-sm" title="Delete Comment">
+                                    <a href="{{ route('blog.comments.delete', $comment->id) }}" class="btn btn-danger btn-sm" title="Delete Comment">
                                         <i class="far fa-trash-alt"></i>
                                     </a>
                             </td>
@@ -69,6 +73,7 @@
     </div>
 </div>
 @endsection
+
 @section('script')
 <script>
 document.addEventListener('DOMContentLoaded', function () {

@@ -39,13 +39,13 @@
                                 </div>
 
                                 <div class="blog_details">
-                                    <a class="d-inline-block" href="single-blog.html">
+                                    <a class="d-inline-block" href="{{ route('blog.details', $blog->slug) }}">
                                         <h2>{{ $blog->title }}</h2>
                                     </a>
                                     <p>{!! $blog->short_description !!}</p>
                                     <ul class="blog-info-link">
                                         <li><a href="#"><i class="far fa-user"></i> {{ $blog->user->name }} | {{ $blog->user->role }}</a></li>
-                                         <li><a href="#"><i class="far fa-comments"></i> {{ $blog->blog_comment->count() }} Comments</a></li>
+                                         <li><a href="#"><i class="far fa-comments"></i> {{ $blog->blog_comments->count() }} Comments</a></li>
                                     </ul>
                                 </div>
                             </article>

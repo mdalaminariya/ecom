@@ -42,15 +42,15 @@
                                     $price = strip_tags($product->price); // removes <p> tags
                                 @endphp
                                 <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-top:0;">
-                                    {{ $price }}
+                                    ${{ $price }}
                                 </p>
                                     <p style="margin-top: -30PX">{!! $product->short_description !!}</p>
                                  <ul class="blog-info-link mb-2">
                                      <li><a href="#"><i class="far fa-user"></i> {{ $product->user->name }} | {{ $product->user->role }}</a></li>
-                                     <li><a href="#"><i class="far fa-comments"></i> {{ $product->product_comments->count() }} Comments</a></li>
+                                     <li><a href="{{ route('product.details', $product->slug) }}"><i class="far fa-comments"></i> {{ $product->product_comments->count() }} Comments</a></li>
                                  </ul>
                                    <!-- Buy Button -->
-                                    <a href="#" class="btn btn-success mt-2">
+                                    <a href="{{ route('product.details', $product->slug) }}" class="btn btn-success mt-2">
                                         <i class="fas fa-shopping-cart"></i> Buy Now
                                     </a>
                              </div>
@@ -98,7 +98,7 @@
                                 <div class="media post_item">
                                     <img style="width: 30%; height: 30%;" src="{{ asset('images/product') }}/{{ $product->thumbnail }}" alt="post">
                                     <div class="media-body">
-                                        <a href="single-blog.html">
+                                        <a href="{{ route('product.details', $product->slug) }}">
                                             <h3>{{ $product->title }}</h3>
                                             <h3>{!! Str::limit($product->short_description, 30) !!}</h3>
                                         </a>

@@ -10,9 +10,22 @@ return new class extends Migration
     {
         Schema::create('blog_comments', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('blog_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->text('comment');
+
+            // Nullable for guest comments
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+
+            // Guest info
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+
+            // Main comment
+            $table->text('message');
+
+            // Reply system
+            $table->foreignId('parent_id')->nullable()->constrained('blog_comments')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

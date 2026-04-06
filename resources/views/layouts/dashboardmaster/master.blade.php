@@ -219,12 +219,27 @@
 
                 {{-- comment Route Link start --}}
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
-                <li class="nav-item">
-                <a href="{{ route('comments.index') }}">
-                    <i class="fas fa-comments"></i>
-                    <p>Comments</p>
+                    <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#comments">
+                  <i class="fas fa-comments"></i>
+                  <p>Comments</p>
+                  <span class="caret"></span>
                 </a>
-                </li>
+                <div class="collapse" id="comments">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="{{ route('comments.index') }}">
+                        <span class="sub-item">Product Comments</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ route('blog.comments') }}">
+                        <span class="sub-item">Blog Comments</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
                 @endif
                 {{-- comment Route Link end --}}
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\BlogComment;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,27 +12,30 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+public function list()
+{
+    $blogs = Blog::with('user')->latest()->get();
+    $categories = Category::where('status', 'active')->latest()->get();
+    $recentBlogs = Blog::latest()->take(5)->get();
+
+    return view('frontend.blog.index', compact('blogs', 'categories', 'recentBlogs'));
+}
+    // Dashboard: List all blogs
     public function index()
     {
         $blogs = Blog::latest()->paginate(10);
-        return view('dashboard.blog.index',compact('blogs'));
+        return view('dashboard.blog.index', compact('blogs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Dashboard: Show create blog form
     public function create()
     {
         $categories = Category::where('status','active')->latest()->get();
         return view('dashboard.blog.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Dashboard: Store new blog
     public function store(Request $request)
     {
         $manager = new ImageManager(new Driver());
@@ -43,75 +47,72 @@ class BlogController extends Controller
             'thumbnail' => 'required|image'
         ]);
 
+        $new_name = null;
         if($request->hasFile('thumbnail')){
-        $new_name = auth()->user()->id.'-'.Str::random(4).'.'.$request->file('thumbnail')->getClientOriginalExtension();
-        $image = $manager->read($request->file('thumbnail'));
-        $image->toPng()->save('images/blog/'.$new_name);
-
-        if($request->slug){
-            Blog::create([
-                'user_id' => auth()->user()->id,
-                'category_id' => $request->category_id,
-                'thumbnail' => $new_name,
-                'title' => ucfirst($request->title),
-                'slug' => Str::slug($request->slug,'-'),
-                'short_description' => $request->short_description,
-                'description' => $request->description,
-            ]);
-            return redirect()->route('blog.index')->with('success','Blog Inserted Successfully');
-        }else{
-            Blog::create([
-                'user_id' => auth()->user()->id,
-                'category_id' => $request->category_id,
-                'thumbnail' => $new_name,
-                'title' => ucfirst($request->title),
-                'slug' => Str::slug($request->title,'-'),
-                'short_description' => $request->short_description,
-                'description' => $request->description,
-            ]);
-            return redirect()->route('blog.index')->with('success','Blog Inserted Successfully');
+            $new_name = auth()->user()->id.'-'.Str::random(4).'.'.$request->file('thumbnail')->getClientOriginalExtension();
+            $image = $manager->read($request->file('thumbnail'));
+            $image->toPng()->save(public_path('images/blog/'.$new_name));
         }
+
+        Blog::create([
+            'user_id' => auth()->user()->id,
+            'category_id' => $request->category_id,
+            'thumbnail' => $new_name,
+            'title' => ucfirst($request->title),
+            'slug' => $request->slug ? Str::slug($request->slug) : Str::slug($request->title),
+            'short_description' => $request->short_description,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('blog.index')->with('success', 'Blog Inserted Successfully');
     }
+public function storeComment(Request $request, $blog_id)
+{
+    $request->validate([
+        'comment'   => 'required|string',
+        'parent_id' => 'nullable|exists:blog_comments,id',
+        'name'      => 'nullable|string|max:255',
+        'email'     => 'nullable|email|max:255',
+    ]);
+
+    $blog = Blog::findOrFail($blog_id);
+
+    // Determine if user is logged in
+    $user_id = auth()->check() ? auth()->id() : null;
+    $name    = auth()->check() ? null : $request->name;
+    $email   = auth()->check() ? null : $request->email;
+
+    // Create the comment
+    $blog->blog_comments()->create([
+        'user_id'   => $user_id,             // null for guest
+        'name'      => $name,
+        'email'     => $email,
+        'message'   => $request->comment,    // your DB column is 'message'
+        'parent_id' => $request->parent_id,  // null if top-level
+    ]);
+
+    return back()->with('success', 'Comment added successfully!');
 }
 
-public function status($id){
-    $blog = Blog::where('id',$id)->first();
-    if($blog->status == 'deactive'){
-        $blog->update([
-            'status' => 'active'
-        ]);
-        return back()->with('success','Blog Activated');
-    }else{
-        $blog->update([
-            'status' => 'deactive'
-        ]);
-        return back()->with('success','Blog Deactivated');
-    }
-}
+    // Dashboard: Toggle blog status
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Blog $blog)
+    public function status($id)
     {
-        $categories = Category::where('status','active')->latest()->get();
-        $blogs = Blog::where('id',$blog->id)->latest()->get();
-        return view('frontend.blog.index', compact('blogs', 'categories'));
+        $blog = Blog::findOrFail($id);
+        $blog->status = $blog->status === 'deactive' ? 'active' : 'deactive';
+        $blog->save();
+
+        return back()->with('success', 'Blog '.$blog->status.' successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // Dashboard: Show edit form
     public function edit(Blog $blog)
     {
-        $blog = Blog::where('id',$blog->id)->first();
         $categories = Category::where('status','active')->latest()->get();
-        return view('dashboard.blog.edit', compact('blog','categories'));
+        return view('dashboard.blog.edit', compact('blog', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // Dashboard: Update blog
     public function update(Request $request, Blog $blog)
     {
         $manager = new ImageManager(new Driver());
@@ -123,49 +124,74 @@ public function status($id){
             'thumbnail' => 'nullable|image'
         ]);
 
-        if($request->hasFile('thumbnail')){
-            if($blog->thumbnail){
-                $old_image = public_path('images/blog/'.$blog->thumbnail);
-                if(file_exists($old_image)){
-                    unlink($old_image);
-                }
+        $data = [
+            'category_id' => $request->category_id,
+            'title' => ucfirst($request->title),
+            'slug' => $request->slug ? Str::slug($request->slug) : Str::slug($request->title),
+            'short_description' => $request->short_description,
+            'description' => $request->description,
+        ];
+
+        if ($request->hasFile('thumbnail')) {
+            if ($blog->thumbnail && file_exists(public_path('images/blog/'.$blog->thumbnail))) {
+                unlink(public_path('images/blog/'.$blog->thumbnail));
             }
-        $new_name = auth()->user()->id.'-'.Str::random(4).'.'.$request->file('thumbnail')->getClientOriginalExtension();
-        $image = $manager->read($request->file('thumbnail'));
-        $image->toPng()->save('images/blog/'.$new_name);
-        $blog->update([
-            'category_id' => $request->category_id,
-            'thumbnail' => $new_name,
-            'title' => ucfirst($request->title),
-            'slug' => Str::slug($request->slug,'-'),
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-        ]);
-        return redirect()->route('blog.index')->with('success','Blog Updated Successfully');
-    }else{
-        $blog->update([
-            'category_id' => $request->category_id,
-            'title' => ucfirst($request->title),
-            'slug' => Str::slug($request->slug,'-'),
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-        ]);
-        return redirect()->route('blog.index')->with('success','Blog Updated Successfully');
+            $new_name = auth()->user()->id.'-'.Str::random(4).'.'.$request->file('thumbnail')->getClientOriginalExtension();
+            $image = $manager->read($request->file('thumbnail'));
+            $image->toPng()->save(public_path('images/blog/'.$new_name));
+            $data['thumbnail'] = $new_name;
+        }
+
+        $blog->update($data);
+        return redirect()->route('blog.index')->with('success', 'Blog Updated Successfully');
     }
-}
-    /**
-     * Remove the specified resource from storage.
-     */
+
+    // Dashboard: Delete blog
     public function destroy(Blog $blog)
     {
-        $blog = Blog::where('id',$blog->id)->first();
-        if($blog->thumbnail){
-            $old_image = public_path('images/blog/'.$blog->thumbnail);
-            if(file_exists($old_image)){
-                unlink($old_image);
-            }
+        if ($blog->thumbnail && file_exists(public_path('images/blog/'.$blog->thumbnail))) {
+            unlink(public_path('images/blog/'.$blog->thumbnail));
         }
+
         $blog->delete();
-        return redirect()->route('blog.index')->with('success','Blog Deleted Successfully');
+        return redirect()->route('blog.index')->with('success', 'Blog Deleted Successfully');
+    }
+
+    // Frontend: Blog details with comments
+public function blog_details($slug)
+{
+    // Fetch blog with user, category, and all top-level comments with nested replies
+    $blog = Blog::with([
+        'user', // author
+        'category',
+        'blog_comments' => function($q) {
+            $q->whereNull('parent_id')   // top-level comments only
+              ->with(['user', 'repliesRecursive']) // eager load nested replies recursively
+              ->latest();
+        }
+    ])
+    ->where('slug', $slug)
+    ->firstOrFail();
+
+    // Recent blogs for sidebar
+    $recentBlogs = Blog::latest()->take(5)->get();
+
+    // Active categories
+    $categories = Category::where('status', 'active')->latest()->get();
+
+    return view('frontend.blog.blogDetails.details', compact('blog', 'categories', 'recentBlogs'));
+}
+
+    public function blog_comments()
+    {
+        $comments = BlogComment::latest()->paginate(10);
+        return view('dashboard.comment.blogcomment', compact('comments'));
+    }
+
+    public function blog_comments_delete($id)
+    {
+        $comment = BlogComment::findOrFail($id);
+        $comment->delete();
+        return back()->with('success', 'Comment Deleted Successfully');
     }
 }

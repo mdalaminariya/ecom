@@ -77,19 +77,17 @@
                                     </div>
                                 </li>
                                     <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="{{ route('blog.index') }}" id="navbarDropdown_2"
-                                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Blog
-                                    </a>
-
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                                        @foreach ($blogs as $blog)
-                                            <a class="dropdown-item" href="{{ route('blog.show', $blog) }}">
-                                                Blogs
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                </li>
+                                        <a class="nav-link dropdown-toggle" href="{{ route('blog.index') }}" id="navbarDropdownBlog" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Blog
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownBlog">
+                                            @foreach($blogs as $blog)
+                                                <a class="dropdown-item" href="{{ route('blog.list', $blog->slug) }}">
+                                                    Blogs
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="contact.html">Contact</a>

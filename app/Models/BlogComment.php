@@ -2,22 +2,43 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BlogComment extends Model
 {
-    protected $table = 'blog_comments'; // matches migration
+    use HasFactory;
 
-    // Comment belongs to a blog
-    public function blog(): BelongsTo
+    protected $fillable = [
+        'blog_id',
+        'user_id',
+        'name',
+        'email',
+        'message',
+        'parent_id',
+    ];
+
+    // User who wrote the comment
+    public function user()
     {
-        return $this->belongsTo(Blog::class, 'blog_id', 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Comment belongs to a user
-    public function user(): BelongsTo
+    // Replies (direct children)
+    public function replies()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->hasMany(BlogComment::class, 'parent_id');
+    }
+
+    // Recursive relationship for nested replies
+    public function repliesRecursive()
+    {
+        return $this->replies()->with('repliesRecursive');
+    }
+
+    // Blog that this comment belongs to
+    public function blog()
+    {
+        return $this->belongsTo(Blog::class);
     }
 }
