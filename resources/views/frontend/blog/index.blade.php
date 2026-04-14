@@ -163,65 +163,29 @@
                         </aside>
 
 
-                        <aside class="single_sidebar_widget instagram_feeds">
-                            <h4 class="widget_title">Instagram Feeds</h4>
-                            <ul class="instagram_row flex-wrap">
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_5.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_6.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_7.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_8.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_9.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img class="img-fluid" src="img/post/post_10.png" alt="">
-                                    </a>
-                                </li>
-                            </ul>
-                        </aside>
+                @if(!$subscribed)
+                    <aside class="single_sidebar_widget newsletter_widget">
+                        <h4 class="widget_title">Newsletter</h4>
 
+                        <form id="newsletterForm">
+                            @csrf
+                            <div class="form-group">
+                                <input type="email" name="email" class="form-control"
+                                    placeholder="Enter email" required>
+                            </div>
 
-                        <aside class="single_sidebar_widget newsletter_widget">
-    <h4 class="widget_title">Newsletter</h4>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1">
+                                Subscribe
+                            </button>
+                        </form>
 
-    <form id="newsletterForm">
-        @csrf
-        <div class="form-group">
-            <input type="email" name="email" class="form-control"
-                placeholder="Enter email" required>
-        </div>
-
-        <button class="button rounded-0 primary-bg text-white w-100 btn_1">
-            Subscribe
-        </button>
-    </form>
-
-    <p id="newsletterMessage" class="mt-2"></p>
-</aside>
-@else
-<div class="alert alert-success" style="height: 50px">
-    ✅ You are already subscribed to our newsletter
-</div>
-@endif
+                        <p id="newsletterMessage" class="mt-2"></p>
+                    </aside>
+                    @else
+                    <div class="alert alert-success" style="height: 50px">
+                        ✅ You are already subscribed to our newsletter
+                    </div>
+                    @endif
                     </div>
                 </div>
             </div>

@@ -10,9 +10,9 @@ class Comment extends Model
     protected $guarded = [];
 
     // Replies relationship
-    public function replies()
+     public function replies()
     {
-        return $this->hasMany(Comment::class, 'parent_id')->with('replies');
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 
     // Optional: relation to product

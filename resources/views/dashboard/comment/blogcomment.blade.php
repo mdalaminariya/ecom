@@ -54,7 +54,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6">
+                            <td colspan="8" class="text-center">
                                 <div class="alert alert-warning text-center mb-0 py-2">
                                     No comments found. Please add comments.
                                 </div>

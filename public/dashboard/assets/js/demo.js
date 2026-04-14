@@ -190,7 +190,7 @@ Circles.create({
 })
 
  //Notify
-if (window.authUser) {
+if (session('login_success') && window.authUser) {
     $.notify({
         icon: 'icon-bell',
         title: 'Aranoz',

@@ -1,23 +1,45 @@
 <?php
 
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Frontend\AuthenticationController;
 use App\Http\Controllers\Frontend\CategoryProductController;
 use App\Http\Controllers\Frontend\CheckOutController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController as BackendHomeController;
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
+//authentication routes start
+Route::get('auth/login',[AuthenticationController::class,'login'])->name('auth.login');
+Route::post('auth/login',[AuthenticationController::class,'login_post'])->name('auth.login');
+Route::get('auth/register',[AuthenticationController::class,'register'])->name('auth.register');
+Route::post('auth/register',[AuthenticationController::class,'register_post'])->name('auth.register.post');
+
+//authentication routes end
+
+// Email Verification
+Route::get('/email/verify', [VerificationController::class, 'notice'])
+    ->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/resend', [VerificationController::class, 'resend'])
+    ->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
 // Frontend Routes start
 
 //home page start
@@ -34,9 +56,20 @@ Route::get('/shopping/cart/add/{id}', [CartController::class, 'addToCart'])->nam
 Route::post('/shopping/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/shopping/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 //shop cart page end
+
 //product Checkout page start
-Route::get('/product/checkout',[CheckOutController::class,'checkout'])->name('product.checkout');
+Route::get('/product/checkout',[CheckOutController::class,'checkout'])->middleware(['auth', 'verified'])->name('product.checkout');
 //product Checkout page end
+
+//Tracking order page start
+Route::get('/tracking/order',[CheckOutController::class,'tracking_order'])->name('tracking.order');
+//Tracking order page end
+
+//contact page start
+Route::get('/contact',[ContactController::class,'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+//contact page end
+
 // Place order route
 Route::post('/checkout/place-order', [CheckOutController::class, 'placeOrder'])->name('checkout.placeOrder');
 //Product details page start
@@ -53,21 +86,35 @@ Route::get('/blogs/{slug}', [BlogController::class, 'blog_details'])->name('blog
 //subcribe route start
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 //subcribe route end
-//authentication routes start
-Route::get('auth/login',[AuthenticationController::class,'login'])->name('auth.login');
-Route::post('auth/login',[AuthenticationController::class,'login_post'])->name('auth.login');
-Route::get('auth/register',[AuthenticationController::class,'register'])->name('auth.register');
-Route::post('auth/register',[AuthenticationController::class,'register_post'])->name('auth.register');
-
-//authentication routes end
 //frontend Routes end
 
 
 // Backend Routes start
+Route::middleware(['auth', 'verified'])->group(function () {
+    //user profile show route start
+    Route::get('/user/{id}/profile', [UserController::class, 'profile'])->name('user.profile');
+    //user profile show route end
 
-//dashboard home route start
-Route::get('/home', [BackendHomeController::class, 'index'])->name('dashboard.home');
-//dashboard home route end
+    //user message send route start
+Route::middleware('auth')->group(function () {
+    Route::get('/inbox', [ChatController::class, 'inbox'])->name('inbox');
+    Route::get('/chat/{id}', [ChatController::class, 'open'])->name('chat.open');
+    Route::post('/send-message', [ChatController::class, 'send'])->name('chat.send');
+});
+    //user message send route end
+
+    //dashboard home route start
+    Route::get('/home', [BackendHomeController::class, 'index'])->name('dashboard.home');
+    //dashboard home route end
+
+    //account settings route start
+    Route::get('/home/account/settings',[AccountSettingsController::class,'index'])->name('home.account.settings');
+    Route::post('name/update',[AccountSettingsController::class,'name_update'])->name('name.update');
+    Route::post('email/update',[AccountSettingsController::class,'email_update'])->name('email.update');
+    Route::post('dashboard/password/update',[AccountSettingsController::class,'password_update'])->name('dashboard.password.update');
+    Route::post('dashboard/image/update',[AccountSettingsController::class,'image_update'])->name('dashboard.image.update');
+    //account settings route end
+});
 
 //dashboard management route start
 Route::middleware(['role_check'])->group(function(){
@@ -153,18 +200,13 @@ Route::prefix('blog')->group(function () {
     Route::put('/{blog}', [BlogController::class, 'update'])->name('blog.update');    // update blog
     Route::delete('/{blog}', [BlogController::class, 'destroy'])->name('blog.destroy'); // delete blog
 
-    // Blog comments
+    // contact message page start
+    Route::get('/contact',[ContactController::class,'contact_messages'])->name('contacts.messages');
+    Route::get('/contact/delete/{id}',[ContactController::class,'delete'])->name('contacts.delete');
+    //contact message page end
 
     // Custom frontend routes
     Route::post('/status/{id}', [BlogController::class,'status'])->name('blog.status');      // toggle status
     });
 // Backend Routes end
 });
-
-//Account Settings Routes start
-Route::get('/home/account/settings',[AccountSettingsController::class,'index'])->name('home.account.settings');
-Route::post('name/update',[AccountSettingsController::class,'name_update'])->name('name.update');
-Route::post('email/update',[AccountSettingsController::class,'email_update'])->name('email.update');
-Route::post('dashboard/password/update',[AccountSettingsController::class,'password_update'])->name('dashboard.password.update');
-Route::post('dashboard/image/update',[AccountSettingsController::class,'image_update'])->name('dashboard.image.update');
-//Account Settings Routes end

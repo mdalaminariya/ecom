@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\NewUserNotification;
 
@@ -62,14 +64,27 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-  protected function create(array $data)
-{
-    $user = User::create([
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'password' => Hash::make($data['password']),
-    ]);
 
-    return $user;
+    // Create new user
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+    }
+
+    // Override register method to fire verification
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        event(new Registered($user)); // sends verification email
+
+        return redirect()->route('verification.notice')->with('success', 'Registration successful! Please verify your email.');
+    }
 }
-}
+

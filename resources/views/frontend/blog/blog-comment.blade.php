@@ -6,7 +6,7 @@
         $userImage = auth()->user()->image ?? null;
         $isDefault = $userImage === 'default.png'; // or whatever your default file is named
     @endphp
-
+    <a href="{{ route('user.profile', $comment->user->id) }}">
     @if ($isDefault || !$userImage)
         <!-- Show default avatar -->
         <img src="{{ asset('images/default/default.png') }}" alt="user" width="50">
@@ -14,9 +14,18 @@
         <!-- Show user-uploaded avatar -->
         <img src="{{ asset('images/profile/' . $userImage) }}" alt="user" width="50">
     @endif
+    </a>
 </div>
             <div class="desc">
-                <h5>{{ $comment->user->name ?? $comment->name }}</h5>
+                <h5>
+                @if($comment->user)
+                    <a href="{{ route('user.profile', $comment->user->id) }}">
+                        {{ $comment->user->name }}
+                    </a>
+                @else
+                    {{ $comment->name }}
+                @endif
+            </h5>
                 <p class="date">{{ $comment->created_at->format('F j, Y \a\t g:i a') }}</p>
                 <p class="comment">{{ $comment->message }}</p>
                 <a href="javascript:void(0);" onclick="setReply({{ $comment->id }}, '{{ $comment->user->name ?? $comment->name }}')">Reply</a>

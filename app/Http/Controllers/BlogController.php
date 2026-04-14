@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Models\BlogComment;
 use App\Models\Category;
+use App\Models\Newsletter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -19,7 +20,12 @@ public function list()
     $categories = Category::where('status', 'active')->latest()->get();
     $recentBlogs = Blog::latest()->take(5)->get();
 
-    return view('frontend.blog.index', compact('blogs', 'categories', 'recentBlogs'));
+    $subscribed = false;
+
+     if(session()->has('newsletter_email')){
+            $subscribed = Newsletter::where('email', session('newsletter_email'))->exists();
+        }
+    return view('frontend.blog.index', compact('blogs', 'categories', 'recentBlogs', 'subscribed'));
 }
     // Dashboard: List all blogs
     public function index()
@@ -175,7 +181,6 @@ public function blog_details($slug)
 
     // Recent blogs for sidebar
     $recentBlogs = Blog::latest()->take(5)->get();
-
     // Active categories
     $categories = Category::where('status', 'active')->latest()->get();
 

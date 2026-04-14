@@ -78,4 +78,8 @@ class CheckOutController extends Controller
             return $this->sslPayment($order);
         }
     }
+
+    public function tracking_order(){
+        return view('frontend.OrderTracking.index');
+    }
 }

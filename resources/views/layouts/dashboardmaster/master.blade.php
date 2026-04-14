@@ -241,6 +241,25 @@
                 </div>
               </li>
                 @endif
+
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manager')
+                    <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#contacts">
+                  <i class="fas fa-comments"></i>
+                  <p>Contacts</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="contacts">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="{{ route('contacts.messages') }}">
+                        <span class="sub-item">Contacts Messages</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+                @endif
                 {{-- comment Route Link end --}}
 
               {{-- Account Settings Route link start --}}
@@ -333,54 +352,74 @@
                   </ul>
                 </li>
                 <li class="nav-item topbar-icon dropdown hidden-caret">
-                  <a
-                    class="nav-link dropdown-toggle"
+               <a class="nav-link dropdown-toggle position-relative"
                     href="#"
                     id="messageDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <i class="fa fa-envelope"></i>
-                  </a>
-                  <ul
-                    class="dropdown-menu messages-notif-box animated fadeIn"
-                    aria-labelledby="messageDropdown"
-                  >
-                    <li>
-                      <div
-                        class="dropdown-title d-flex justify-content-between align-items-center"
-                      >
-                        Messages
-                        <a href="#" class="small">Mark all as read</a>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="message-notif-scroll scrollbar-outer">
-                        <div class="notif-center">
-                          <a href="#">
-                            <div class="notif-img">
-                              <img
-                                src="{{ asset('dashboard') }}/assets/img/jm_denis.jpg"
-                                alt="Img Profile"
-                              />
-                            </div>
-                            <div class="notif-content">
-                              <span class="subject">Jimmy Denis</span>
-                              <span class="block"> How are you ? </span>
-                              <span class="time">5 minutes ago</span>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <a class="see-all" href="javascript:void(0);"
-                        >See all messages<i class="fa fa-angle-right"></i>
-                      </a>
-                    </li>
-                  </ul>
+                    data-bs-toggle="dropdown">
+
+                        <i class="fa fa-envelope"></i>
+
+                        @if($unreadCount > 0)
+                            <span class="badge bg-danger"
+                                style="position:absolute; top:0; right:0; font-size:10px;">
+                                {{ $unreadCount }}
+                            </span>
+                        @endif
+                    </a>
+<ul class="dropdown-menu messages-notif-box animated fadeIn">
+
+    <li>
+        <div class="dropdown-title d-flex justify-content-between align-items-center px-3 py-2">
+            <strong>Messages</strong>
+            <a href="{{ route('inbox') }}" class="small text-primary">View all</a>
+        </div>
+    </li>
+
+@forelse($latestMessages as $msg)
+
+    @php
+        $isMe = $msg->sender_id == auth()->id();
+        $otherUser = $isMe ? $msg->receiver : $msg->sender;
+    @endphp
+
+<li>
+    <a href="{{ route('chat.open', $otherUser->id) }}"
+       class="dropdown-item d-flex align-items-center gap-2"
+       style="text-decoration:none;">
+
+        <!-- Avatar -->
+        <div>
+            @if (auth()->user()->image == 'default.png')
+                <img src="{{ asset('images/default/default.png') }}" alt="user"width="40"height="40"style="border-radius:50%; object-fit:cover;">
+            @else
+                <img src="{{ asset('images/profile/' . $otherUser->image) }}"alt="user" width="40"height="40"style="border-radius:50%; object-fit:cover;">
+            @endif
+        </div>
+
+        <!-- Text -->
+        <div style="flex:1;">
+            <strong>{{ $otherUser->name }}</strong>
+
+            <div class="small text-muted">
+                {{ $isMe ? 'You: ' : '' }}
+                {{ \Illuminate\Support\Str::limit($msg->message, 30) }}
+            </div>
+        </div>
+
+    </a>
+</li>
+
+@empty
+    <li class="px-3 py-2 text-muted">No messages</li>
+@endforelse
+
+    <li class="px-3 py-2">
+        <a href="{{ route('inbox') }}" class="btn btn-sm btn-primary w-100">
+            Open Inbox
+        </a>
+    </li>
+
+</ul>
                 </li>
                 {{-- notification alert start--}}
                <li class="nav-item topbar-icon dropdown hidden-caret">
@@ -666,8 +705,30 @@
         fillColor: "rgba(255, 165, 52, .14)",
       });
     </script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    @yield('script')
+    // Message badge count update script
+        <script>
+        function loadUnreadCount() {
+            $.get('/messages/unread/count', function(data) {
+
+                if (data.count > 0) {
+                    $('#msgBadge').text(data.count).show();
+                } else {
+                    $('#msgBadge').hide();
+                }
+
+            });
+        }
+
+        // run every 5 seconds
+        setInterval(loadUnreadCount, 5000);
+
+        // initial load
+        loadUnreadCount();
+        </script>
+
+        // Notification badge count update script
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   </body>
 </html>

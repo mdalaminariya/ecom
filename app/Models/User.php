@@ -6,8 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -46,4 +47,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Messages sent by user
+        public function sentMessages()
+        {
+            return $this->hasMany(Message::class, 'sender_id');
+        }
+        public function blogComments()
+            {
+                return $this->hasMany(BlogComment::class, 'user_id');
+            }
+        // Messages received by user
+        public function receivedMessages()
+        {
+            return $this->hasMany(Message::class, 'receiver_id');
+        }
 }

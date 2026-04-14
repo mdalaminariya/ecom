@@ -9,6 +9,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>aranoz</title>
     <link rel="icon" href="{{ asset('frontend') }}/assets/img/favicon.png">
@@ -40,7 +41,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-12">
                     <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="index.html"> <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo"> </a>
+                        <a class="navbar-brand" href="{{ route('frontend.home') }}"> <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo"> </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -69,11 +70,10 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
                                         <a class="dropdown-item" href="{{ route('login') }}"> login</a>
-                                        <a class="dropdown-item" href="tracking.html">tracking</a>
+                                        <a class="dropdown-item" href="{{ route('tracking.order') }}">tracking</a>
                                         <a class="dropdown-item" href="{{ route('product.checkout') }}">product checkout</a>
                                         <a class="dropdown-item" href="{{ route('shopping.cart') }}">shopping cart</a>
                                         <a class="dropdown-item" href="confirmation.html">confirmation</a>
-                                        <a class="dropdown-item" href="elements.html">elements</a>
                                     </div>
                                 </li>
                                     <li class="nav-item dropdown">
@@ -90,7 +90,7 @@
                                     </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
+                                    <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -340,6 +340,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         }
     }
 </script>
+@stack('scripts')
 </body>
 
 </html>

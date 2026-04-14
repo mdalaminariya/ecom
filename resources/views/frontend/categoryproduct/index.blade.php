@@ -18,7 +18,7 @@
     </section>
     <!-- breadcrumb start-->
 
-    <!--================Blog Area =================-->
+    <!--================Product area =================-->
     <section class="blog_area padding_top">
         <div class="container">
             <div class="row">

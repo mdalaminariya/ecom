@@ -201,59 +201,119 @@
                     </div>
 
                     {{-- Individual Reviews List --}}
-                    <div class="review_list" style="margin-top:20px;">
-                        @foreach ($comments as $comment)
-                        @php
-                            $colors = ['#ff6b6b', '#6c5ce7', '#00b894', '#fdcb6e', '#0984e3'];
-                            $bg = $colors[crc32($comment->name) % count($colors)];
-                        @endphp
-                        <div class="review_item" style="margin-bottom:20px;">
-                            <div class="media" style="display: flex; align-items: flex-start; gap: 10px;">
+                   <div class="review_list" style="margin-top:20px;">
 
-                                {{-- Colored initial circle avatar --}}
-                                <div style="
-                                    width:50px;
-                                    height:50px;
-                                    border-radius:50%;
-                                    background: {{ $bg }};
-                                    color:white;
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    font-weight:bold;
-                                    font-size:20px;
-                                    text-transform:uppercase;
-                                    flex-shrink: 0;
-                                ">
-                                    {{ substr($comment->name, 0, 1) }}
-                                </div>
+        @foreach ($comments as $comment)
 
-                                {{-- Media body: name, stars, message --}}
-                                <div class="media-body" style="margin-left:0;">
-                                    <h4 style="margin-bottom: 5px;">{{ $comment->name }}</h4>
-                                    <div class="rating" style="margin-bottom: 8px;">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            @if($i <= floor($comment->rating))
-                                                <i class="fa-solid fa-star" style="color: #ffd700 !important;"></i>
-                                            @elseif($i - $comment->rating < 1)
-                                                <i class="fa-solid fa-star-half-alt" style="color: #ffd700 !important;"></i>
-                                            @else
-                                                <i class="fa-regular fa-star" style="color: #cccccc !important;"></i>
-                                            @endif
-                                        @endfor
-                                    </div>
-                                    <p style="margin: 0; color: #555; line-height: 1.4;">
-                                        {{ $comment->message }}
-                                    </p>
-                                </div>
-                            </div>
+            @php
+                $colors = ['#ff6b6b', '#4dabf7', '#51cf66', '#ffd43b', '#845ef7'];
+                $bg = $colors[crc32($comment->name) % count($colors)];
+            @endphp
+
+            <div class="review_item" style="margin-bottom:20px;">
+
+                <div class="media" style="display:flex; gap:10px; align-items:flex-start;">
+
+                    {{-- Avatar --}}
+                    <div style=" width:50px; height:50px;border-radius:50%;background:{{ $bg }};
+                        color:#fff;display:flex;align-items:center;justify-content:center;
+                        font-weight:bold;font-size:20px;text-transform:uppercase;flex-shrink:0;
+                    ">
+                        {{ strtoupper(substr($comment->name, 0, 1)) }}
+                    </div>
+
+                    {{-- Content --}}
+                    <div class="media-body" style="flex:1;">
+
+                        <h4 style="margin-bottom:5px;">
+                            {{ $comment->name }}
+                        </h4>
+
+                        {{-- Rating --}}
+                        <div style="margin-bottom:8px;">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if($i <= floor($comment->rating))
+                                    <i class="fa-solid fa-star" style="color:#ffd700;"></i>
+                                @elseif($i - $comment->rating < 1)
+                                    <i class="fa-solid fa-star-half-stroke" style="color:#ffd700;"></i>
+                                @else
+                                    <i class="fa-regular fa-star" style="color:#ccc;"></i>
+                                @endif
+                            @endfor
                         </div>
-                    @endforeach
-                    {{-- Pagination links --}}
-                    <div class="d-flex justify-content-center">
-                        {{ $comments->links() }}
+
+                        {{-- Message --}}
+                        <p style="margin:0; color:#555; line-height:1.5;">
+                            {{ $comment->message }}
+                        </p>
+                       @if($comment->image)
+                            <div style="margin-top:10px;">
+                                <img src="{{ asset('images/comments/' . $comment->image) }}"
+                                    style="width:150px; height:auto; border-radius:8px;">
+                            </div>
+                        @endif
+
+                        {{-- Reply Button --}}
+                        <button onclick="toggleReply({{ $comment->id }})"
+                            style="margin-top:8px; font-size:13px; color:#007bff; border:none; background:none; cursor:pointer;">
+                            Reply
+                        </button>
+
+                        {{-- Reply Form --}}
+                        <div id="reply-form-{{ $comment->id }}" style="display:none; margin-top:10px;">
+                            <form method="POST" action="{{ route('comments.store') }}">
+                                @csrf
+
+                                <input type="hidden" name="product_id" value="{{ $comment->product_id }}">
+                                <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+
+                                <textarea name="message" required
+                                    style="width:100%; padding:8px; margin-bottom:8px;"
+                                    placeholder="Write a reply..."></textarea>
+
+                                <button type="submit"
+                                    style="padding:6px 12px; background:#28a745; color:#fff; border:none;">
+                                    Send Reply
+                                </button>
+                            </form>
+                        </div>
+
+                        {{-- Replies --}}
+                        @if($comment->replies->count())
+                            <div style="margin-left:60px; margin-top:15px; border-left:2px solid #eee; padding-left:10px;">
+
+                                @foreach ($comment->replies as $reply)
+                                    <div style="margin-bottom:10px;">
+
+                                        <strong>{{ $reply->name }}</strong>
+
+                                        <p style="margin:0; color:#666;">
+                                            {{ $reply->message }}
+                                        </p>
+
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                            @endif
+
+                        </div>
                     </div>
-                    </div>
+                </div>
+            @endforeach
+
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-center">
+                {{ $comments->links() }}
+            </div>
+
+            </div>
+                    <script>
+                    function toggleReply(id) {
+                        let el = document.getElementById('reply-form-' + id);
+                        el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                    }
+                    </script>
                 </div>
 
                 {{-- RIGHT SIDE: Add Review Form --}}
@@ -275,12 +335,11 @@
 
                         <p id="rating-text">0 Star</p>
 
-                        {{-- ✅ FORM START --}}
-                        <form action="{{ route('comments.store') }}" method="POST">
+
+                       <form action="{{ route('comments.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            {{-- ✅ FIXED: inside form --}}
                             <input type="hidden" name="rating" id="rating" value="0">
 
                             <div class="form-group">
@@ -288,16 +347,37 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="email" name="email" class="form-control" placeholder="Email">
-                            </div>
-
-                            <div class="form-group">
                                 <textarea name="message" class="form-control" placeholder="Review" required></textarea>
                             </div>
 
+                            {{-- IMAGE UPLOAD --}}
+                            <div class="mb-3">
+                                <img id="preview-image"
+                                    style="height:8rem; margin-left:30%;"
+                                    src="{{ asset('images/default/default.png') }}"alt="Default Image">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="file" name="image" id="imageInput" class="form-control">
+                            </div>
+                            <script>
+                                document.getElementById('imageInput').addEventListener('change', function (event) {
+                                    const file = event.target.files[0];
+
+                                    if (file) {
+                                        const reader = new FileReader();
+
+                                        reader.onload = function (e) {
+                                            document.getElementById('preview-image').src = e.target.result;
+                                        };
+
+                                        reader.readAsDataURL(file);
+                                    }
+                                });
+                                </script>
                             <button type="submit" class="btn_3">Submit Review</button>
                         </form>
-                        {{-- ✅ FORM END --}}
+                        {{-- FORM END --}}
                     </div>
                 </div>
 
@@ -380,4 +460,46 @@
 
    </div>
   </section>
+@endsection
+
+
+@section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        @if ($errors->any())
+            Toastify({
+                text: "{{ $errors->first() }}",
+                duration: 4000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #FF0112, #D21302)",
+            }).showToast();
+        @endif
+
+        @if (session('success'))
+            Toastify({
+                text: "{{ session('success') }}",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            }).showToast();
+        @endif
+
+        @if (session('error'))
+            Toastify({
+                text: "{{ session('error') }}",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "linear-gradient(to right, #FF0112, #D21302)",
+            }).showToast();
+        @endif
+
+    });
+</script>
 @endsection
